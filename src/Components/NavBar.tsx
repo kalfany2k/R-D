@@ -2,7 +2,6 @@ import { HStack, Hide, Show, Text } from "@chakra-ui/react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NavButtonsPC from "./NavButtonsPC";
 import NavButtonsPhone from "./NavButtonsPhone";
-import { useState } from "react";
 
 interface Props {
   setMenuActive: () => void;
@@ -33,6 +32,7 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
         <Show above="md">
           <NavButtonsPC />
         </Show>
+
         <Show below="md">
           <NavButtonsPhone
             isMenuActive={isMenuActive}

@@ -19,7 +19,7 @@ function App() {
           lg: "400px 1fr",
         }}
       >
-        <GridItem area="nav" bg="purple">
+        <GridItem area="nav">
           <NavBar
             isMenuActive={isMenuActive}
             setMenuActive={() => setMenuActive(!isMenuActive)}
@@ -27,13 +27,11 @@ function App() {
           <SearchBar />
         </GridItem>
         <Show above="lg">
-          <GridItem area="aside" bg="pink">
+          <GridItem area="aside">
             <EventCategoryList />
           </GridItem>
         </Show>
-        <GridItem area="main" bg="grey">
-          Main
-        </GridItem>
+        <GridItem area="main">Main</GridItem>
       </Grid>
     </div>
   );

@@ -1,5 +1,5 @@
-import ColorModeSwitch from "./ColorModeSwitch";
 import { Text, Button } from "@chakra-ui/react";
+import ColorModeSwitch from "./ColorModeSwitch";
 
 export const navOptionList = ["How it works", "Become a partner", "Log in"];
 

@@ -1,5 +1,4 @@
 import { Heading, List } from "@chakra-ui/react";
-import React from "react";
 
 const EventCategoryList = () => {
   return (
