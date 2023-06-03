@@ -23,7 +23,7 @@ function App() {
           lg: "400px 1fr",
         }}
       >
-        <GridItem area="nav" bg="purple">
+        <GridItem area="nav" className="nav-search">
           <NavBar
             isMenuActive={isMenuActive}
             setMenuActive={() => setMenuActive(!isMenuActive)}
