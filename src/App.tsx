@@ -1,4 +1,4 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, Show } from "@chakra-ui/react";
 import { useState } from "react";
 import NavBar from "./Components/NavBar";
 import SearchBar from "./Components/SearchBar";
@@ -32,10 +32,13 @@ function App() {
           />
           <SearchBar />
         </GridItem>
-        <GridItem area="aside">
-          <EventCategoryList />
-        </GridItem>
-        <GridItem area="main" bg="#67568c">
+
+        <Show above="lg">
+          <GridItem area="aside">
+            <EventCategoryList />
+          </GridItem>
+        </Show>
+        <GridItem area="main">
           {showHowItWorks ? (
             <HowItWorks />
           ) : showBecomeaPartner ? (
