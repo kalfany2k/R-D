@@ -2,8 +2,9 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
 import NavBar from "./Components/NavBar";
 import SearchBar from "./Components/SearchBar";
-import HowItWorks from './Components/HowItWorks'; 
-import BecomeAPartner from './Components/BecomeaPartner';  // Don't forget to create this component
+import HowItWorks from "./Components/HowItWorks";
+import BecomeAPartner from "./Components/BecomeaPartner"; // Don't forget to create this component
+import EventCategoryList from "./Components/EventCategoryList";
 
 function App() {
   const [isMenuActive, setMenuActive] = useState(false);
@@ -31,8 +32,17 @@ function App() {
           />
           <SearchBar />
         </GridItem>
+        <GridItem area="aside">
+          <EventCategoryList />
+        </GridItem>
         <GridItem area="main" bg="#67568c">
-          {showHowItWorks ? <HowItWorks /> : showBecomeaPartner ? <BecomeAPartner /> : "Main"}
+          {showHowItWorks ? (
+            <HowItWorks />
+          ) : showBecomeaPartner ? (
+            <BecomeAPartner />
+          ) : (
+            "Main"
+          )}
         </GridItem>
       </Grid>
     </div>
