@@ -1,0 +1,15 @@
+for database:
+user:project
+password:Project
+for admin:
+user: project
+password: project
+
+
+in vs code in terminal
+pipenv shell
+(to activate the interpretor)
+after this line you will get a path
+source the path
+pipenv install django-debug-toolbar
+
