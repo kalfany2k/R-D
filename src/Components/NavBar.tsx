@@ -1,5 +1,4 @@
-
-import { HStack, Show,Text } from "@chakra-ui/react";
+import { HStack, Show, Text } from "@chakra-ui/react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NavButtonsPC from "./NavButtonsPC";
 import NavButtonsPhone from "./NavButtonsPhone";
@@ -7,11 +6,9 @@ import NavButtonsPhone from "./NavButtonsPhone";
 interface Props {
   setMenuActive: () => void;
   isMenuActive: boolean;
-  setShowHowItWorks: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowBecomeaPartner:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NavBar = ({ setMenuActive, isMenuActive, setShowHowItWorks, setShowBecomeaPartner}: Props) => {
+const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
   return (
     <HStack display="flex" justifyContent="space-between">
       <div
@@ -33,8 +30,8 @@ const NavBar = ({ setMenuActive, isMenuActive, setShowHowItWorks, setShowBecomea
 
       <div style={{ paddingRight: 15 }}>
         <Show above="md">
-          <NavButtonsPC setShowHowItWorks={setShowHowItWorks}
-          setShowBecomeaPartner={setShowBecomeaPartner} /></Show>
+          <NavButtonsPC />
+        </Show>
 
         <Show below="md">
           <NavButtonsPhone

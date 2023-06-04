@@ -8,8 +8,6 @@ import EventCategoryList from "./Components/EventCategoryList";
 
 function App() {
   const [isMenuActive, setMenuActive] = useState(false);
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
-  const [showBecomeaPartner, setShowBecomeaPartner] = useState(false);
 
   return (
     <div>
@@ -27,8 +25,6 @@ function App() {
           <NavBar
             isMenuActive={isMenuActive}
             setMenuActive={() => setMenuActive(!isMenuActive)}
-            setShowHowItWorks={setShowHowItWorks}
-            setShowBecomeaPartner={setShowBecomeaPartner}
           />
           <SearchBar />
         </GridItem>
@@ -38,15 +34,7 @@ function App() {
             <EventCategoryList />
           </GridItem>
         </Show>
-        <GridItem area="main">
-          {showHowItWorks ? (
-            <HowItWorks />
-          ) : showBecomeaPartner ? (
-            <BecomeAPartner />
-          ) : (
-            "Main"
-          )}
-        </GridItem>
+        <GridItem area="main">"Main"</GridItem>
       </Grid>
     </div>
   );
