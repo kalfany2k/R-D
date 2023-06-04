@@ -27,7 +27,7 @@ const NavBar = ({ setMenuActive, isMenuActive, setShowHowItWorks, setShowBecomea
           style={{ fontSize: 50, paddingRight: 10 }}
         ></i>
         <Text fontSize="4xl" fontWeight="bold">
-          Ticket
+          TicketHub
         </Text>
       </div>
 
