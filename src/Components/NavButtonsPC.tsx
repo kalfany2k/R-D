@@ -1,5 +1,6 @@
 import ColorModeSwitch from "./ColorModeSwitch";
 import { Text, Button } from "@chakra-ui/react";
+import LoginButton from "./LoginButton";
 
 export const navOptionList = ["How it works", "Become a partner", "Log in"];
 
@@ -23,9 +24,7 @@ const NavButtonsPC = () => {
         );
       })}
 
-      <Button size="md" colorScheme="green">
-        Sell tickets
-      </Button>
+      <LoginButton />
     </div>
   );
 };
