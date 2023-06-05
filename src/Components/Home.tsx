@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
 import EventGrid from "./EventGrid";
 
-function App() {
+function Home() {
   const [isMenuActive, setMenuActive] = useState(false);
 
   return (
@@ -33,4 +33,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;

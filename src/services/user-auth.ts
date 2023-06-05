@@ -8,3 +8,23 @@ export const login = (username: string, password: string) => {
       localStorage.setItem("sessionToken", response.data.refresh);
     });
 };
+
+export const register = (
+  username: string,
+  password: string,
+  email: string,
+  phone: string,
+  birthDate: string,
+  firstName: string,
+  lastName: string
+) => {
+  return apiClient.post("/product/customers/register/", {
+    username,
+    password,
+    email,
+    phone,
+    birthDate,
+    firstName,
+    lastName,
+  });
+};

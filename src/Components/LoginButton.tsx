@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Text,
@@ -6,6 +6,7 @@ import {
   FormLabel,
   HStack,
   Input,
+  Flex,
 } from "@chakra-ui/react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +18,16 @@ const LoginButton = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const handleCreateAccount = () => {
+    navigate("/register");
+  };
+
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     login(username, password).then(() => {
-      navigate("/" + localStorage.getItem("sessionToken"));
+      navigate("/" + localStorage.getItem("sessionToken")?.substring(0, 10));
+      window.location.reload();
     });
   };
 
@@ -89,9 +95,21 @@ const LoginButton = () => {
                   value={password}
                 ></Input>
               </FormControl>
-              <Button type="submit" marginTop="10px">
-                Login
-              </Button>
+
+              <Flex flexDirection="row" alignItems="center">
+                <Button type="submit" marginTop="10px">
+                  Login
+                </Button>
+                <Text
+                  paddingTop="0.6rem"
+                  paddingLeft="1rem"
+                  fontSize={18}
+                  cursor="pointer"
+                  onClick={handleCreateAccount}
+                >
+                  Don't have an account?
+                </Text>
+              </Flex>
             </form>
           </div>
         </div>
