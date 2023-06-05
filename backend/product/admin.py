@@ -104,6 +104,10 @@ class CategoryAdmin(admin.ModelAdmin):
          verbose_name = 'category'
          verbose_name_plural = 'Categories'
 
+@admin.register(models.EventCreator)
+class EventCreatorAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'birth_date', 'user')
+
 
 
 class OrderItemInline(admin.TabularInline):

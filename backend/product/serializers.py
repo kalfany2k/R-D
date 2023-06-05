@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from decimal import Decimal
 from django.db import transaction
+from core.models import User
+
+from location.models import Location
 from .signals import order_created
 from .models import Cart, CartItem, Category, Customer, Event, EventCreator, Order, OrderItem
 
@@ -9,7 +12,7 @@ from .models import Cart, CartItem, Category, Customer, Event, EventCreator, Ord
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ['id','title','price']
+        fields = ['id','title','price', 'location']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -83,10 +86,10 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
         fields = ['quantity']
 
 class CustomerSerializer(serializers.ModelSerializer):
-    user_id =serializers.IntegerField(read_only = True)
     class Meta:
         model = Customer
-        fields = ['id', 'user_id', 'phone','birth_date']
+        fields = ['id', 'user', 'phone', 'birth_date', 'first_name']
+
 
 class EventCreatorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -147,3 +150,40 @@ class CreateOrderSerializer(serializers.Serializer):
             order_created.send_robust(self.__class__, order=order)
 
             return order
+
+
+class CreateEventSerializer(serializers.ModelSerializer):
+    location = serializers.PrimaryKeyRelatedField(queryset=Location.objects.all())
+
+    class Meta:
+        model = Event
+        fields = ['title', 'price', 'location']
+
+    def create(self, validated_data):
+        location = validated_data.pop('location')
+        event = Event.objects.create(location=location, **validated_data)
+        return event
+    
+
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password']
+            # Add any other fields you want to set for the User model during registration
+        )
+        # Create the associated Customer instance
+        customer = Customer.objects.create(
+            user=user,
+            phone=validated_data['phone'],
+            birth_date=validated_data['birth_date']
+            # Add any other fields you want to set for the Customer model during registration
+        )
+        return customer
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'phone', 'birth_date']

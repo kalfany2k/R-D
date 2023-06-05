@@ -1,3 +1,6 @@
+import random
+import uuid
+from core.serializers import UserCreateSerializer, UserSerializer
 from location.models import Location
 from product.filters import EventFilter
 from product.permissions import ViewCustomerHistory
@@ -12,8 +15,9 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework import status
-from product.serializers import AddCartItemSerializer, CartItemSerializer, CartSerializer, CategorySerializer, CreateOrderSerializer, CustomerSerializer, EventCreatorSerializer, EventSerializer, OrderSerializer, UpdateCartItemSerializer, UpdateOrderSerializer
+from product.serializers import AddCartItemSerializer, CartItemSerializer, CartSerializer, CategorySerializer, CreateOrderSerializer, CustomerSerializer, EventCreatorSerializer, EventSerializer, OrderSerializer, RegistrationSerializer, UpdateCartItemSerializer, UpdateOrderSerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db import transaction
 # Create your views here.
 
 class CategoryViewSet(ModelViewSet):
@@ -75,8 +79,6 @@ class CartItemViewSet(ModelViewSet):
 class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsAdminUser]
-
     @action(detail=False,methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
     def me(self, request):
          customer = Customer.objects.get(user_id=request.user.id)
@@ -99,37 +101,125 @@ class CustomerViewSet(ModelViewSet):
             return Response({'message': 'No orders available for this customer.'}, status=status.HTTP_204_NO_CONTENT)
         
         return Response(serializer.data)
-
     
+    @action(detail=False, methods=['POST'])
+    def register(self, request):
+        if self.request.user.is_authenticated:
+            # If the user is authenticated, associate the customer with the authenticated user
+            serializer = UserSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+            customer_data = {
+                **request.data,
+                'user': user.id,
+                'first_name': request.data.get('username'),
+                'last_name': request.data.get('username')
+            }
+            customer_serializer = CustomerSerializer(data=customer_data)
+            customer_serializer.is_valid(raise_exception=True)
+            customer = customer_serializer.save()
+            return Response(customer_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            # If the user is not authenticated, create a new user and customer instance
+            user_id = random.randint(1000, 9999)  # Generate a random ID
+            user_serializer = UserCreateSerializer(data={**request.data, 'id': user_id})
+            user_serializer.is_valid(raise_exception=True)
+            user = user_serializer.save()
+            customer_data = {
+                **request.data,
+                'user': user.id,
+                'first_name': request.data.get('username'),
+                'last_name': request.data.get('username')
+            }
+            customer_serializer = CustomerSerializer(data=customer_data)
+            customer_serializer.is_valid(raise_exception=True)
+            customer = customer_serializer.save()
+            return Response(customer_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class EventCreatorViewSet(ModelViewSet):
-    queryset = EventCreator.objects.all()
-    serializer_class = EventCreatorSerializer
-
-    def create(self, request, *args, **kwargs):
+    @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated])
+    def create_event(self, request):
         event_data = request.data
-        location_data = event_data.pop('location', None)  
-        event_creator = request.user 
+        location_data = event_data.pop('location', None)
 
+        customer = Customer.objects.get(user_id=request.user.id)
         if location_data:
-            location_id = location_data.pop('id', None) 
+            location_id = location_data.pop('id', None)
             if location_id:
                 location = Location.objects.get(id=location_id)
+                Location.objects.filter(id=location_id).update(**location_data)
             else:
                 location = Location.objects.create(**location_data)
         else:
             location = None
 
-        event_data['creator'] = event_creator
+        event_data['creator'] = customer
         event_data['location'] = location
 
-        serializer = self.get_serializer(data=event_data)
+        serializer = EventSerializer(data=event_data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        event = serializer.save()
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        with transaction.atomic():
+            # Create a customer with the same data and the same ID as the user
+            customer_data = {
+                'id': request.user.id,
+                'user': request.user.id,
+                'phone': customer.phone,
+                'birth_date': customer.birth_date,
+                'first_name': customer.first_name,
+            }
+            customer_serializer = CustomerSerializer(data=customer_data)
+            customer_serializer.is_valid(raise_exception=True)
+            customer_serializer.save()
 
+        return Response({'message': 'Event created successfully.'}, status=status.HTTP_201_CREATED)
+
+    
+    
+
+# class EventCreatorViewSet(ModelViewSet):
+#      queryset = EventCreator.objects.all()
+#      serializer_class = EventCreatorSerializer
+
+#      @action(detail=False,methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+#      def me(self, request):
+#          customer = Customer.objects.get(user_id=request.user.id)
+#          if request.method == 'GET': 
+#             serializer = CustomerSerializer(customer)
+#             return Response(serializer.data)
+#          elif request.method == 'PUT':
+#              serializer = CustomerSerializer(customer, data= request.data)
+#              serializer.is_valid(raise_exception=True)
+#              serializer.save()
+#              return Response(serializer.data)
+         
+#      @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated])
+#      def create_event(self, request):
+#         event_data = request.data
+#         location_data = event_data.pop('location', None)
+
+#         customer = Customer.objects.get(user_id=request.user.id)
+#         if location_data:
+#             location_id = location_data.pop('id', None)
+#             if location_id:
+#                 location = Location.objects.get(id=location_id)
+#                 Location.objects.filter(id=location_id).update(**location_data)
+#             else:
+#                 location = Location.objects.create(**location_data)
+#         else:
+#             location = None
+
+#         event_data['creator'] = customer
+#         event_data['location'] = location
+
+#         serializer = EventSerializer(data=event_data)
+#         serializer.is_valid(raise_exception=True)
+#         event = serializer.save()
+
+#         return Response({'message': 'Event created successfully.'}, status=status.HTTP_201_CREATED)
+#      def list(self, request, *args, **kwargs):
+#         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 class OrderViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
