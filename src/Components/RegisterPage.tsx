@@ -1,6 +1,7 @@
 import { Button, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { register } from "../services/user-auth";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -10,11 +11,20 @@ const RegisterPage = () => {
   const [birthDate, setBirthDate] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const navigate = useNavigate();
 
   const handleRegisterRequest = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    register(username, password, email, phone, birthDate, firstName, lastName);
+    register(
+      username,
+      password,
+      email,
+      phone,
+      birthDate,
+      firstName,
+      lastName
+    ).then(() => navigate("/"));
   };
 
   return (
