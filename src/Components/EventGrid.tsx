@@ -1,5 +1,26 @@
+import useEvent from "../Hooks/useEvent";
+import EventCard from "./EventCard";
+import EventCardContainer from "./EventCardContainer";
+import { Flex, Text } from "@chakra-ui/react";
+
 const EventGrid = () => {
-  return <></>;
+  const { data, error, isLoading } = useEvent();
+
+  return (
+    <Flex
+      flexDirection="column"
+      justifyItems="center"
+      alignItems="center"
+      gap={5}
+      paddingTop={5}
+    >
+      {data.map((event) => (
+        <EventCardContainer key={event.id}>
+          <EventCard event={event} />
+        </EventCardContainer>
+      ))}
+    </Flex>
+  );
 };
 
 export default EventGrid;

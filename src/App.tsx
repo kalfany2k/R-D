@@ -1,36 +1,33 @@
-import { Grid, GridItem } from "@chakra-ui/react";
-import { useState } from "react";
-import NavBar from "./Components/NavBar";
-import SearchBar from "./Components/SearchBar";
-import EventGrid from "../src/Components/EventGrid";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Home from "./Components/Home";
 
 function App() {
-  const [isMenuActive, setMenuActive] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const sessionToken = localStorage.getItem("sessionToken");
+
+    setLoggedIn(accessToken !== null && sessionToken !== null);
+  }, []);
 
   return (
-    <div>
-      <Grid
-        templateAreas={{
-          base: '"nav" "main"',
-        }}
-        templateColumns={{
-          base: "1fr",
-        }}
-      >
-        <GridItem area="nav" className="nav-search">
-          <NavBar
-            isMenuActive={isMenuActive}
-            setMenuActive={() => setMenuActive(!isMenuActive)}
-          />
-          <SearchBar />
-        </GridItem>
-
-        <GridItem area="main">
-          <EventGrid />
-        </GridItem>
-      </Grid>
-    </div>
+    <>
+      <Router>
+        <Routes>
+          {isLoggedIn ? (
+            <Route
+              path={"/" + localStorage.getItem("sessionToken")}
+              element={<Home />}
+            />
+          ) : (
+            <Route path="/" element={<Home />} />
+          )}
+        </Routes>
+      </Router>
+    </>
   );
 }
 

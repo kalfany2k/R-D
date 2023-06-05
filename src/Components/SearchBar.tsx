@@ -30,7 +30,12 @@ const SearchBar = () => {
       <Text fontSize="2xl" fontWeight="semibold">
         The best ticket marketplace
       </Text>
-      <form style={{ width: window.innerWidth <= 768 ? "85vw" : "50vw" }}>
+      <form
+        style={{ width: window.innerWidth <= 768 ? "85vw" : "50vw" }}
+        onSubmit={(event) => {
+          event.preventDefault();
+        }}
+      >
         <InputGroup>
           <InputLeftElement children={<i className="bi bi-search" />} />
           <Input

@@ -10,6 +10,12 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   config,
+  breakpoints: {
+    sm: "30em", // 480px
+    md: "48em", // 768px
+    lg: "62em", // 992px
+    xl: "80em", // 1280px
+  },
   styles: {
     global: (props: StyleFunctionProps) => ({
       body: {
@@ -21,6 +27,9 @@ const theme = extendTheme({
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
+      },
+      ".login": {
+        color: props.colorMode === "light" ? "white" : "#e8d399",
       },
     }),
   },

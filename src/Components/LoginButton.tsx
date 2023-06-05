@@ -8,20 +8,21 @@ import {
   Input,
 } from "@chakra-ui/react";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { useNavigate } from "react-router-dom";
+import { login } from "../services/user-auth";
 
 const LoginButton = () => {
   const [isLoginPopupOpen, setLoginPopupOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    console.log(username);
-    console.log(password);
-
-    setUsername("");
-    setPassword("");
+    login(username, password).then(() => {
+      navigate("/" + localStorage.getItem("sessionToken"));
+    });
   };
 
   return (
@@ -38,8 +39,10 @@ const LoginButton = () => {
             left: "0",
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            zIndex: "10",
           }}
+          className="login"
         >
           <div
             style={{
@@ -48,6 +51,7 @@ const LoginButton = () => {
               left: "40%",
               width: "20%",
               height: "20%",
+              zIndex: "10",
             }}
           >
             <HStack
