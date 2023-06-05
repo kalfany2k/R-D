@@ -106,31 +106,30 @@ class CustomerViewSet(ModelViewSet):
     @action(detail=False, methods=['POST'])
     def register(self, request):
         if self.request.user.is_authenticated:
-            # If the user is authenticated, associate the customer with the authenticated user
+            # User is already authenticated
             serializer = UserSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
             customer_data = {
                 **request.data,
                 'user': user.id,
-                'first_name': request.data.get('username'),
-                'last_name': request.data.get('username')
+                'first_name': request.data.get('first_name') or request.data.get('username'),
+                'last_name': request.data.get('last_name') or request.data.get('username')
             }
             customer_serializer = CustomerSerializer(data=customer_data)
             customer_serializer.is_valid(raise_exception=True)
             customer = customer_serializer.save()
             return Response(customer_serializer.data, status=status.HTTP_201_CREATED)
         else:
-            # If the user is not authenticated, create a new user and customer instance
-            user_id = random.randint(1000, 9999)  # Generate a random ID
+            user_id = uuid.uuid4()  # Generate a random ID
             user_serializer = UserCreateSerializer(data={**request.data, 'id': user_id})
             user_serializer.is_valid(raise_exception=True)
             user = user_serializer.save()
             customer_data = {
                 **request.data,
                 'user': user.id,
-                'first_name': request.data.get('username'),
-                'last_name': request.data.get('username')
+                'first_name': request.data.get('first_name') or request.data.get('username'),
+                'last_name': request.data.get('last_name') or request.data.get('username')
             }
             customer_serializer = CustomerSerializer(data=customer_data)
             customer_serializer.is_valid(raise_exception=True)
