@@ -2,12 +2,11 @@ from django.contrib import admin
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.conf import settings
 from uuid import uuid4
 from datetime import datetime
 from location.models import Location
-from datetime import timedelta
-from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+
 #from store.validators import validate_file_size
 
 
@@ -18,8 +17,7 @@ class Category(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    class Meta:
-        ordering = ['title']
+
 
 # Music, Sports, Arts and Theatre, Workshops and Conferences, Food and Drinks, Health and Wellness, Charity and Fundraising, Comedy, Educational
 class Event(models.Model):

@@ -1,24 +1,22 @@
-import random
 import uuid
-from core.models import User
+from .models import Cart, CartItem, Customer, Event, Order, OrderItem, Category
+from .filters import EventFilter
+from .serializers import (
+    AddCartItemSerializer, CartItemSerializer, CartSerializer, CategorySerializer,
+    CreateOrderSerializer, CustomerSerializer, EventSerializer, OrderSerializer,
+    UpdateCartItemSerializer, UpdateOrderSerializer
+)
 from core.serializers import UserCreateSerializer, UserSerializer
 from location.models import Location
-from product.filters import EventFilter
-from product.permissions import ViewCustomerHistory
-from .models import Cart, CartItem, Customer, Event, EventCreator, Order, OrderItem
-from django.shortcuts import render
 from rest_framework.response import Response
-from django.db.models.aggregates import Count
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser 
-from product.models import Category
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
-from rest_framework import status
-from product.serializers import AddCartItemSerializer, CartItemSerializer, CartSerializer, CategorySerializer, CreateOrderSerializer, CustomerSerializer, EventCreatorSerializer, EventSerializer, OrderSerializer, RegistrationSerializer, UpdateCartItemSerializer, UpdateOrderSerializer
+from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db import transaction
 # Create your views here.
 
 class CategoryViewSet(ModelViewSet):
@@ -185,7 +183,7 @@ class CustomerViewSet(ModelViewSet):
 
     
     
-
+# we tried to have a sepate type of user to create events
 # class EventCreatorViewSet(ModelViewSet):
 #      queryset = EventCreator.objects.all()
 #      serializer_class = EventCreatorSerializer
