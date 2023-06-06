@@ -15,8 +15,8 @@ const EventCard = ({ event }: Props) => {
           marginTop={{ base: "12", md: "10" }}
           marginRight="3"
         >
-          <Text fontWeight="semibold" fontSize="1xl" marginBottom="-1">
-            {event.location.city}
+          <Text fontWeight="semibold" fontSize={15} marginBottom="-1">
+            {event.location.address}
           </Text>
           <Text fontWeight="bold" fontSize={{ base: 16, sm: "2xl" }}>
             {event.title}

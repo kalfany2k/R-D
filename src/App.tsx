@@ -24,13 +24,12 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          {isLoggedIn ? (
+          <Route path={"/" + sessionToken?.slice(0, 10)} element={<Home />} />
+          {isLoggedIn && (
             <Route
-              path={"/" + sessionToken?.substring(0, 10)}
-              element={<Home />}
+              path="/"
+              element={<Navigate to={"/" + sessionToken?.slice(0, 10)} />}
             />
-          ) : (
-            <></>
           )}
           <Route path="/register" element={<RegisterPage />} />
         </Routes>

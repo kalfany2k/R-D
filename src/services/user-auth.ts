@@ -1,4 +1,14 @@
+import { useState } from "react";
 import apiClient from "./api-client";
+
+interface User {
+  id: number;
+  user: number;
+  phone: string;
+  birth_date: string;
+  first_name: string;
+  last_name: string;
+}
 
 export const login = (username: string, password: string) => {
   return apiClient
@@ -14,17 +24,33 @@ export const register = (
   password: string,
   email: string,
   phone: string,
-  birthDate: string,
-  firstName: string,
-  lastName: string
+  birth_date: string,
+  first_name: string,
+  last_name: string
 ) => {
   return apiClient.post("/product/customers/register/", {
     username,
     password,
     email,
     phone,
-    birthDate,
-    firstName,
-    lastName,
+    birth_date,
+    first_name,
+    last_name,
   });
+};
+
+export const getUser = () => {
+  const [data, setData] = useState<User>();
+
+  apiClient
+    .get<User>("/product/customers/me", {
+      headers: {
+        Authorization: "JWT " + localStorage.getItem("accessToken"),
+      },
+    })
+    .then((response) => {
+      setData(response.data);
+    });
+
+  return data;
 };
