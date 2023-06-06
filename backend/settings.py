@@ -174,6 +174,7 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('JWT',),
    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+   # this was for testing
    #valid 30 days from june 1st "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4ODIxMDExMiwiaWF0IjoxNjg1NjE4MTEyLCJqdGkiOiIwNzdhYzA5ZjQxYTQ0NTljYmFiNmFlNjI1ZjAwN2Q0OSIsInVzZXJfaWQiOjN9.ZZZNLIZ6C8HaB1aAIjoj5oGehCigWKViORm3PNyYRJM",
    # "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4NDk0ODU0LCJpYXQiOjE2ODU5MDI4NTQsImp0aSI6IjRiNzQzYzVlMmUxYjRkNzI4YzMwOGM3NGJlMGQ4NWI0IiwidXNlcl9pZCI6M30.VUBwNDuZ8x7BjbqK0tZXG0tFriQNBMywF_dLQVcLTSk"
     # need modheader extension, create a profile with authorization and the token JWT and the access
