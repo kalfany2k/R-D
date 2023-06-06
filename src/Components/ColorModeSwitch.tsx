@@ -5,8 +5,16 @@ const ColorModeSwitch = () => {
 
   return (
     <HStack>
-      <Switch isChecked={colorMode === "dark"} onChange={toggleColorMode} />
-      <Text fontSize="1xl" fontWeight="semibold">
+      <Switch
+        paddingBottom={1}
+        isChecked={colorMode === "dark"}
+        onChange={toggleColorMode}
+      />
+      <Text
+        className="nav-buttons-responsive"
+        fontSize="1xl"
+        fontWeight="semibold"
+      >
         Dark Mode
       </Text>
     </HStack>

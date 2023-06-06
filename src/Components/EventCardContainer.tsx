@@ -10,7 +10,7 @@ const EventCardContainer = ({ children }: Props) => {
     <Box
       width={{ base: "80%", md: "70%", lg: "50%" }}
       height="100px"
-      backgroundColor="green"
+      backgroundColor="rgba(255, 255, 255, 0.6)"
       borderRadius={10}
       overflow="hidden"
     >

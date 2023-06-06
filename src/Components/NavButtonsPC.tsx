@@ -2,7 +2,7 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import { Text, Button } from "@chakra-ui/react";
 import LoginButton from "./LoginButton";
 
-export const navOptionList = ["How it works", "Become a partner", "Log in"];
+export const navOptionList = ["How it works", "Become a partner"];
 
 const NavButtonsPC = () => {
   return (
@@ -12,13 +12,18 @@ const NavButtonsPC = () => {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        width: "600px",
+        width: "500px",
       }}
     >
       <ColorModeSwitch />
       {navOptionList.map((option) => {
         return (
-          <Text key={option} fontSize="1xl" fontWeight="semibold">
+          <Text
+            className="nav-buttons-responsive"
+            key={option}
+            fontSize="1xl"
+            fontWeight="semibold"
+          >
             {option}
           </Text>
         );

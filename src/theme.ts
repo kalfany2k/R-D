@@ -31,6 +31,12 @@ const theme = extendTheme({
       ".login": {
         color: props.colorMode === "light" ? "white" : "#e8d399",
       },
+      ".nav-buttons-responsive": {
+        textShadow:
+          props.colorMode === "light"
+            ? "2px 2px 4px rgba(255, 255, 255, 0.7)"
+            : "2px 2px 4px rgba(0, 0, 0, 0.7)",
+      },
     }),
   },
 });

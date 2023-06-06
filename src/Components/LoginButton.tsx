@@ -33,7 +33,11 @@ const LoginButton = () => {
 
   return (
     <div>
-      <Button colorScheme="green" onClick={() => setLoginPopupOpen(true)}>
+      <Button
+        paddingTop="3px"
+        colorScheme="green"
+        onClick={() => setLoginPopupOpen(true)}
+      >
         Log in
       </Button>
 
