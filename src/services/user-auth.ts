@@ -40,17 +40,11 @@ export const register = (
 };
 
 export const getUser = () => {
-  const [data, setData] = useState<User>();
-
-  apiClient
+  return apiClient
     .get<User>("/product/customers/me", {
       headers: {
         Authorization: "JWT " + localStorage.getItem("accessToken"),
       },
     })
-    .then((response) => {
-      setData(response.data);
-    });
-
-  return data;
+    .then((response) => response.data);
 };

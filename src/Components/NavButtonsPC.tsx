@@ -3,7 +3,7 @@ import { Text, Button } from "@chakra-ui/react";
 import LoginButton from "./LoginButton";
 import UserDropdown from "./UserDropdown";
 
-export const navOptionList = ["How it works", "Become a partner"];
+export const navOptionList = ["How it works", "Create an event"];
 
 interface Props {
   isLoggedIn: boolean;
@@ -17,18 +17,13 @@ const NavButtonsPC = ({ isLoggedIn }: Props) => {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        width: "500px",
+        width: "550px",
       }}
     >
       <ColorModeSwitch />
       {navOptionList.map((option) => {
         return (
-          <Text
-            className="nav-buttons-responsive"
-            key={option}
-            fontSize="1xl"
-            fontWeight="semibold"
-          >
+          <Text key={option} fontSize="1xl" fontWeight="semibold">
             {option}
           </Text>
         );

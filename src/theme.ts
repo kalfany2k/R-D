@@ -47,6 +47,11 @@ const theme = extendTheme({
       ".nav-log-in-button-theme": {
         bg: mode("secondarySiteColor", "secondarySiteColorDark")(props),
       },
+      ".nav-welcome-button-theme": {
+        backgroundColor: mode("secondarySiteColor", "#0c2d3e80")(props),
+        _hover: { backgroundColor: mode("#1f77a380", "#8bd3dd")(props) },
+        cursor: "pointer",
+      },
       ".search-bar-theme": {
         backgroundColor: mode("", "rgba(255, 255, 255, 0.1)")(props),
         borderRadius: 20,

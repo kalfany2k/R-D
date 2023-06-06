@@ -13,6 +13,7 @@ const SearchBar = () => {
     <VStack
       paddingTop={{ base: "50px", sm: "75px", md: "100px" }}
       paddingBottom="50px"
+      className="nav-buttons-responsive"
     >
       <Text fontSize="2xl" fontWeight="semibold">
         The best ticket marketplace

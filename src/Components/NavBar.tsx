@@ -21,7 +21,11 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
   }, []);
 
   return (
-    <HStack display="flex" justifyContent="space-between">
+    <HStack
+      display="flex"
+      justifyContent="space-between"
+      className="nav-buttons-responsive"
+    >
       <div
         style={{
           display: "flex",
