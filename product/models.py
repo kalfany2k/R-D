@@ -43,8 +43,7 @@ class Event(models.Model):
     def __str__(self) -> str:
         return self.title
 
-    class Meta:
-        ordering = ['title']
+    
 
 class Customer(models.Model):
     

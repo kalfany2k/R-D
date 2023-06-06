@@ -55,14 +55,25 @@ class EventViewSet(ModelViewSet):
         return super().destroy(request, *args, **kwargs)
     
     @action(detail=False, methods=['GET'])
-    def search_events(self, requst):
-        event = requst.GET.get('query')
-        if event:
-            event = Event.objects.filter(title__icontains=event)
-            serializer = EventSerializer(event, many=True)
+    def search_events(self, request):
+        event = request.GET.get('query')
+        category_ids = request.query_params.get('category_id')
+        
+        events = self.queryset  
+
+        if category_ids:
+            category_ids = category_ids.split(',')
+            events = events.filter(category__id__in=category_ids)
+
+        elif event:
+            events = events.filter(title__icontains=event)
+
+        serializer = EventSerializer(events, many=True)
+        
+        if events.exists(): 
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'No events found matching the search criteria'}, status=status.HTTP_404_NOT_FOUND)
         
 
 
