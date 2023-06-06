@@ -23,11 +23,13 @@ const SearchBar = () => {
           event.preventDefault();
         }}
       >
-        <InputGroup>
+        <InputGroup className="search-bar-theme">
           <InputLeftElement children={<i className="bi bi-search" />} />
           <Input
             borderRadius={20}
+            paddingTop="3px"
             placeholder="Search for an event, artist, or city"
+            _placeholder={{ color: "black" }}
             variant="filled"
           />
         </InputGroup>

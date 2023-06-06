@@ -47,6 +47,11 @@ const theme = extendTheme({
       ".nav-log-in-button-theme": {
         bg: mode("secondarySiteColor", "secondarySiteColorDark")(props),
       },
+      ".search-bar-theme": {
+        backgroundColor: mode("", "rgba(255, 255, 255, 0.1)")(props),
+        borderRadius: 20,
+        color: "black",
+      },
     }),
   },
 });

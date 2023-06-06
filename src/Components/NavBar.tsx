@@ -2,6 +2,7 @@ import { HStack, Show, Text } from "@chakra-ui/react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NavButtonsPC from "./NavButtonsPC";
 import NavButtonsPhone from "./NavButtonsPhone";
+import { useEffect, useState } from "react";
 
 interface Props {
   setMenuActive: () => void;
@@ -9,6 +10,16 @@ interface Props {
 }
 
 const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("accessToken") !== null &&
+      localStorage.getItem("sessionToken") !== null
+    )
+      setIsLoggedIn(true);
+  }, []);
+
   return (
     <HStack display="flex" justifyContent="space-between">
       <div
@@ -30,7 +41,7 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
 
       <div style={{ paddingRight: 15 }}>
         <Show above="md">
-          <NavButtonsPC />
+          <NavButtonsPC isLoggedIn={isLoggedIn} />
         </Show>
 
         <Show below="md">

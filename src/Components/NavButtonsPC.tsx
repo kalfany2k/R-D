@@ -1,10 +1,15 @@
 import ColorModeSwitch from "./ColorModeSwitch";
 import { Text, Button } from "@chakra-ui/react";
 import LoginButton from "./LoginButton";
+import UserDropdown from "./UserDropdown";
 
 export const navOptionList = ["How it works", "Become a partner"];
 
-const NavButtonsPC = () => {
+interface Props {
+  isLoggedIn: boolean;
+}
+
+const NavButtonsPC = ({ isLoggedIn }: Props) => {
   return (
     <div
       style={{
@@ -29,7 +34,7 @@ const NavButtonsPC = () => {
         );
       })}
 
-      <LoginButton />
+      {isLoggedIn ? <UserDropdown /> : <LoginButton />}
     </div>
   );
 };
