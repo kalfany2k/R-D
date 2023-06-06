@@ -53,6 +53,17 @@ class EventViewSet(ModelViewSet):
         if OrderItem.objects.filter(event = kwargs['pk']).count() > 0:
              return Response({'error':'Event cannot be deleted'},status=status.HTTP_405_METHOD_NOT_ALLOWED)
         return super().destroy(request, *args, **kwargs)
+    
+    @action(detail=False, methods=['GET'])
+    def search_events(self, requst):
+        event = requst.GET.get('query')
+        if event:
+            event = Event.objects.filter(title__icontains=event)
+            serializer = EventSerializer(event, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 class CartViewSet(CreateModelMixin,
