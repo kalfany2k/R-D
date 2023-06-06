@@ -10,6 +10,10 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({
   config,
+  colors: {
+    secondarySiteColor: "#8bd3dd",
+    secondarySiteColorDark: "#e26e5d",
+  },
   breakpoints: {
     sm: "30em", // 480px
     md: "48em", // 768px
@@ -36,6 +40,12 @@ const theme = extendTheme({
           props.colorMode === "light"
             ? "2px 2px 4px rgba(255, 255, 255, 0.7)"
             : "2px 2px 4px rgba(0, 0, 0, 0.7)",
+      },
+      ".search-bar-responsive": {
+        width: { base: "85%", md: "70%", lg: "60%", xl: "50%" },
+      },
+      ".nav-log-in-button-theme": {
+        bg: mode("secondarySiteColor", "secondarySiteColorDark")(props),
       },
     }),
   },

@@ -31,7 +31,7 @@ const SearchBar = () => {
         The best ticket marketplace
       </Text>
       <form
-        style={{ width: window.innerWidth <= 768 ? "85vw" : "50vw" }}
+        className="search-bar-responsive"
         onSubmit={(event) => {
           event.preventDefault();
         }}

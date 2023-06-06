@@ -22,9 +22,10 @@ const EventGrid = () => {
       gap={5}
       paddingTop={5}
     >
+      {error && <Text>{error}</Text>}
       {isLoading &&
         skeletons.map((skeleton) => (
-          <EventCardContainer>
+          <EventCardContainer key={skeleton}>
             <EventCardSkeleton />
           </EventCardContainer>
         ))}

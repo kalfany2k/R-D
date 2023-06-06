@@ -1,4 +1,12 @@
-import { Button, Flex, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Grid,
+  GridItem,
+  Input,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { register } from "../services/user-auth";
 import { useNavigate } from "react-router-dom";
@@ -30,72 +38,101 @@ const RegisterPage = () => {
   return (
     <div
       style={{
-        width: "100%",
-        height: "50vw",
+        width: "100vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
         overflow: "hidden",
       }}
     >
-      <Flex direction="column" align="flex-start">
-        <form onSubmit={handleRegisterRequest}>
-          <FormControl id="username" paddingTop="5px">
-            <FormLabel>Username</FormLabel>
-            <Input
-              onChange={(e) => setUsername(e.target.value)}
-              type="text"
-              value={username}
-            />
-          </FormControl>
-          <FormControl id="password" paddingTop="10px">
-            <FormLabel>Password</FormLabel>
-            <Input
-              onChange={(e) => setPassword(e.target.value)}
-              type="text"
-              value={password}
-            />
-          </FormControl>
-          <FormControl id="email" paddingTop="10px">
-            <FormLabel>Email</FormLabel>
-            <Input
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              value={email}
-            />
-          </FormControl>
-          <FormControl id="phone" paddingTop="10px">
-            <FormLabel>Phone</FormLabel>
-            <Input
-              onChange={(e) => setPhone(e.target.value)}
-              type="tel"
-              value={phone}
-            />
-          </FormControl>
-          <FormControl id="birthDate" paddingTop="10px">
-            <FormLabel>Birth Date</FormLabel>
-            <Input
-              onChange={(e) => setBirthDate(e.target.value)}
-              type="date"
-              value={birthDate}
-            />
-          </FormControl>
-          <FormControl id="firstName" paddingTop="10px">
-            <FormLabel>First name</FormLabel>
-            <Input
-              onChange={(e) => setFirstName(e.target.value)}
-              type="string"
-              value={firstName}
-            />
-          </FormControl>
-          <FormControl id="lastName" paddingTop="10px">
-            <FormLabel>Last name</FormLabel>
-            <Input
-              onChange={(e) => setLastName(e.target.value)}
-              type="string"
-              value={lastName}
-            />
-          </FormControl>
-          <Button type="submit">Submit</Button>
-        </form>
-      </Flex>
+      <form onSubmit={handleRegisterRequest}>
+        <Grid
+          h="500px"
+          templateColumns="repeat(2, 1fr)"
+          gap={10}
+          alignItems="center"
+        >
+          <GridItem colSpan={1}>
+            <FormControl id="username">
+              <FormLabel>Username</FormLabel>
+              <Input
+                onChange={(e) => setUsername(e.target.value)}
+                type="text"
+                value={username}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={1}>
+            <FormControl id="password">
+              <FormLabel>Password</FormLabel>
+              <Input
+                onChange={(e) => setPassword(e.target.value)}
+                type="text"
+                value={password}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <FormControl id="email">
+              <FormLabel>Email</FormLabel>
+              <Input
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                value={email}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={1}>
+            <FormControl id="phone">
+              <FormLabel>Phone</FormLabel>
+              <Input
+                onChange={(e) => setPhone(e.target.value)}
+                type="tel"
+                value={phone}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={1}>
+            <FormControl id="birthDate">
+              <FormLabel>Birth Date</FormLabel>
+              <Input
+                onChange={(e) => setBirthDate(e.target.value)}
+                type="date"
+                value={birthDate}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <FormControl id="firstName">
+              <FormLabel>First name</FormLabel>
+              <Input
+                onChange={(e) => setFirstName(e.target.value)}
+                type="string"
+                value={firstName}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <FormControl id="lastName">
+              <FormLabel>Last name</FormLabel>
+              <Input
+                onChange={(e) => setLastName(e.target.value)}
+                type="string"
+                value={lastName}
+              />
+            </FormControl>
+          </GridItem>
+          <GridItem
+            colSpan={2}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button type="submit">Submit</Button>
+          </GridItem>
+        </Grid>
+      </form>
     </div>
   );
 };

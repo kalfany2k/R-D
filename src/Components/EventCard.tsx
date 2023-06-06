@@ -1,4 +1,4 @@
-import { Card, CardFooter, Text } from "@chakra-ui/react";
+import { Card, CardFooter, Flex, Text } from "@chakra-ui/react";
 import { Event } from "../Hooks/useEvent";
 
 interface Props {
@@ -7,17 +7,21 @@ interface Props {
 
 const EventCard = ({ event }: Props) => {
   return (
-    <Card bg="transparent" variant="unstyled" position="relative">
-      <CardFooter
-        position="absolute"
-        right="0"
-        marginRight="4"
-        marginBottom="4"
-        marginTop="16"
-      >
-        <Text fontWeight="bold" fontSize="2xl">
-          {event.title}
-        </Text>
+    <Card bg="transparent" variant="unstyled">
+      <CardFooter display="flex" justifyContent="flex-end">
+        <Flex
+          flexDirection="column"
+          alignItems="flex-end"
+          marginTop="10"
+          marginRight="3"
+        >
+          <Text fontWeight="semibold" fontSize="1xl" marginBottom="-1">
+            {event.location.city}
+          </Text>
+          <Text fontWeight="bold" fontSize="2xl">
+            {event.title}
+          </Text>
+        </Flex>
       </CardFooter>
     </Card>
   );

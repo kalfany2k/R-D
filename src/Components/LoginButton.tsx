@@ -35,7 +35,8 @@ const LoginButton = () => {
     <div>
       <Button
         paddingTop="3px"
-        colorScheme="green"
+        colorScheme="none"
+        className="nav-log-in-button-theme"
         onClick={() => setLoginPopupOpen(true)}
       >
         Log in
