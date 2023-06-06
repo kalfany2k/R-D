@@ -23,7 +23,7 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
           className="bi bi-ticket-perforated"
           style={{ fontSize: 50, paddingRight: 10 }}
         ></i>
-        <Text fontSize="4xl" fontWeight="bold">
+        <Text fontSize="4xl" fontWeight="bold" paddingTop="2.5px">
           Ticket
         </Text>
       </div>

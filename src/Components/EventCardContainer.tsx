@@ -8,7 +8,7 @@ interface Props {
 const EventCardContainer = ({ children }: Props) => {
   return (
     <Box
-      width={{ base: "80%", md: "70%", lg: "50%" }}
+      width={{ base: "90%", md: "70%", lg: "50%" }}
       height="100px"
       backgroundColor="rgba(255, 255, 255, 0.6)"
       borderRadius={10}

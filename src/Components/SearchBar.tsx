@@ -9,24 +9,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useEffect, useState } from "react";
 
 const SearchBar = () => {
-  const [paddingTop, setPaddingTop] = useState(
-    window.innerWidth < 768 ? "50px" : "100px"
-  );
-
-  useEffect(() => {
-    const handleResize = () => {
-      setPaddingTop(window.innerWidth < 769 ? "50px" : "100px");
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
-    <VStack paddingTop={paddingTop} paddingBottom="50px">
+    <VStack
+      paddingTop={{ base: "50px", sm: "75px", md: "100px" }}
+      paddingBottom="50px"
+    >
       <Text fontSize="2xl" fontWeight="semibold">
         The best ticket marketplace
       </Text>

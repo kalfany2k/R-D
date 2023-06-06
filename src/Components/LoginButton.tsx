@@ -50,7 +50,7 @@ const LoginButton = () => {
             left: "0",
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
             zIndex: "10",
           }}
           className="login"
@@ -80,7 +80,7 @@ const LoginButton = () => {
               <i
                 className="bi bi-x"
                 onClick={() => setLoginPopupOpen(false)}
-                style={{ fontSize: "2rem" }}
+                style={{ fontSize: "2rem", cursor: "pointer" }}
               />
             </HStack>
             <form onSubmit={handleSubmitForm}>
