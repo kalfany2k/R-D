@@ -1,7 +1,7 @@
 import useEvent from "../Hooks/useEvent";
-import EventCard from "./EventCard";
+import EventCard, { eventExamples } from "./EventCard";
 import EventCardContainer from "./EventCardContainer";
-import { Flex, Text } from "@chakra-ui/react";
+import { SimpleGrid, Flex } from "@chakra-ui/react";
 
 const EventGrid = () => {
   const { data, error, isLoading } = useEvent();
@@ -14,7 +14,7 @@ const EventGrid = () => {
       gap={5}
       paddingTop={5}
     >
-      {data.map((event) => (
+      {eventExamples.map((event) => (
         <EventCardContainer key={event.id}>
           <EventCard event={event} />
         </EventCardContainer>
