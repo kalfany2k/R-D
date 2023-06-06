@@ -94,7 +94,7 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'user', 'phone', 'birth_date', 'first_name']
+        fields = ['id', 'user', 'phone', 'birth_date', 'first_name', 'last_name']
 
 
 class EventCreatorSerializer(serializers.ModelSerializer):

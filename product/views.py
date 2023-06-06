@@ -113,8 +113,8 @@ class CustomerViewSet(ModelViewSet):
             customer_data = {
                 **request.data,
                 'user': user.id,
-                'first_name': request.data.get('first_name') or request.data.get('username'),
-                'last_name': request.data.get('last_name') or request.data.get('username')
+                'first_name': request.data.get('first_name') ,
+                'last_name': request.data.get('last_name') 
             }
             customer_serializer = CustomerSerializer(data=customer_data)
             customer_serializer.is_valid(raise_exception=True)
@@ -128,8 +128,8 @@ class CustomerViewSet(ModelViewSet):
             customer_data = {
                 **request.data,
                 'user': user.id,
-                'first_name': request.data.get('first_name') or request.data.get('username'),
-                'last_name': request.data.get('last_name') or request.data.get('username')
+                'first_name': request.data.get('first_name'),
+                'last_name': request.data.get('last_name') 
             }
             customer_serializer = CustomerSerializer(data=customer_data)
             customer_serializer.is_valid(raise_exception=True)
