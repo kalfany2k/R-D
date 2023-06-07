@@ -49,10 +49,7 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
         </Show>
 
         <Show below="md">
-          <NavButtonsPhone
-            isMenuActive={isMenuActive}
-            onActiveMenu={setMenuActive}
-          />
+          <NavButtonsPhone isLoggedIn={isLoggedIn} />
         </Show>
       </div>
     </HStack>

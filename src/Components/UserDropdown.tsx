@@ -39,8 +39,8 @@ const UserDropdown = () => {
       </Text>
       {dropdownOpen && (
         <Flex
+          className="nav-welcome-button-theme"
           flexDirection="column"
-          backgroundColor="green"
           width="300px"
           height="300px"
           position="absolute"

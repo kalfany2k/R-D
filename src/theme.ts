@@ -49,7 +49,7 @@ const theme = extendTheme({
       },
       ".nav-welcome-button-theme": {
         backgroundColor: mode("secondarySiteColor", "#0c2d3e80")(props),
-        _hover: { backgroundColor: mode("#1f77a380", "#8bd3dd")(props) },
+        _hover: { backgroundColor: mode("#1f77a380", "#69b9cb")(props) },
         cursor: "pointer",
       },
       ".search-bar-theme": {

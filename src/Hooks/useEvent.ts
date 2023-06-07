@@ -21,7 +21,7 @@ const useEvent = (eventQuery: EventQuery) =>
   useData<Event>(
     "/product/events",
     {
-      params: { search: eventQuery.searchText },
+      params: { searchText: eventQuery.searchText },
     },
     [eventQuery]
   );

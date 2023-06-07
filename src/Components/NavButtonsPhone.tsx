@@ -1,12 +1,15 @@
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { VStack } from "@chakra-ui/react";
+import Cart from "./Cart";
+import { useState } from "react";
 
 interface Props {
-  onActiveMenu: () => void;
-  isMenuActive: boolean;
+  isLoggedIn: boolean;
 }
 
-const NavButtonsPhone = ({ onActiveMenu, isMenuActive }: Props) => {
+const NavButtonsPhone = ({ isLoggedIn }: Props) => {
+  const [isMenuActive, setMenuActive] = useState(false);
+
   return (
     <div
       style={{
@@ -17,11 +20,15 @@ const NavButtonsPhone = ({ onActiveMenu, isMenuActive }: Props) => {
       }}
     >
       <i
-        onClick={onActiveMenu}
-        className={isMenuActive ? "bi bi-list" : "bi bi-x-circle"}
-        style={{ fontSize: 40 }}
-      ></i>
-      {isMenuActive ? <VStack></VStack> : ""}
+        onClick={() => setMenuActive(!isMenuActive)}
+        className={!isMenuActive ? "bi bi-list" : "bi bi-x-circle"}
+        style={{ fontSize: 40, marginRight: "10px" }}
+      />
+      {isLoggedIn && (
+        <div style={{ marginRight: "5px" }}>
+          <Cart />
+        </div>
+      )}
     </div>
   );
 };

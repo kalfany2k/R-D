@@ -19,7 +19,14 @@ function Home() {
           base: "1fr",
         }}
       >
-        <GridItem area="nav" className="nav-search">
+        <GridItem
+          area="nav"
+          className="nav-search"
+          position="fixed"
+          width="100vw"
+          height="300px"
+          zIndex={5}
+        >
           <NavBar
             isMenuActive={isMenuActive}
             setMenuActive={() => setMenuActive(!isMenuActive)}
@@ -31,10 +38,15 @@ function Home() {
           />
         </GridItem>
 
-        <GridItem area="main">
+        <GridItem
+          area="main"
+          overflow="auto"
+          marginTop="300px"
+          height="calc(100vh - 300)"
+        >
           <EventGrid eventQuery={eventQuery} />
         </GridItem>
-        {/* <Text>{eventQuery.searchText}</Text> */}
+        <Text>{eventQuery.searchText}</Text>
       </Grid>
     </div>
   );
