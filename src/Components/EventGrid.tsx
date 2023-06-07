@@ -5,9 +5,14 @@ import EventCardContainer from "./EventCardContainer";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import EventCardSkeleton from "./EventCardSkeleton";
 import { Link } from "react-router-dom";
+import { EventQuery } from "../App";
 
-const EventGrid = () => {
-  const { data, error, isLoading } = useEvent();
+interface Props {
+  eventQuery: EventQuery;
+}
+
+const EventGrid = ({ eventQuery }: Props) => {
+  const { data, error, isLoading } = useEvent(eventQuery);
   const [displayCount, setDisplayCount] = useState(5);
   const skeletons = [1, 2, 3, 4, 5];
 

@@ -1,3 +1,4 @@
+import { EventQuery } from "../App";
 import useData from "./useData";
 
 export interface Event {
@@ -16,6 +17,13 @@ export interface Location {
   city: string;
 }
 
-const useEvent = () => useData<Event>("/product/events");
+const useEvent = (eventQuery: EventQuery) =>
+  useData<Event>(
+    "/product/events",
+    {
+      params: { search: eventQuery.searchText },
+    },
+    [eventQuery]
+  );
 
 export default useEvent;

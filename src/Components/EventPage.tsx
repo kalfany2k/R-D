@@ -3,12 +3,15 @@ import { getEvent } from "../services/retrievers";
 import { Event } from "../Hooks/useEvent";
 import { useParams } from "react-router-dom";
 import {
+  Alert,
+  AlertIcon,
   Button,
   Flex,
   Grid,
   GridItem,
   HStack,
   Image,
+  Input,
   Text,
 } from "@chakra-ui/react";
 import NavBar from "./NavBar";
@@ -23,6 +26,8 @@ const EventPage = ({ isLoggedIn }: Props) => {
   const [event, setEvent] = useState<Event>();
   const { eventId } = useParams();
   const [isMenuActive, setMenuActive] = useState(false);
+  const [quantity, setQuantity] = useState("");
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -38,7 +43,19 @@ const EventPage = ({ isLoggedIn }: Props) => {
     fetchEvent();
   }, []);
 
-  const handleAddToCart = () => {};
+  const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    if (Number(value) <= 10) {
+      setQuantity(value);
+      setError(false);
+    } else {
+      setError(true);
+    }
+  };
+
+  const handleAddToCart = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  };
 
   return (
     <div>
@@ -128,12 +145,44 @@ const EventPage = ({ isLoggedIn }: Props) => {
             </Flex>
             <Flex flexDirection="row" paddingTop="30px" paddingBottom="70px">
               {isLoggedIn ? (
-                <Button
-                  leftIcon={<i className="bi bi-bag-fill" />}
-                  onClick={handleAddToCart}
+                <Flex
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  gap="10px"
                 >
-                  <Text marginTop="4px">Add to cart</Text>
-                </Button>
+                  <form onSubmit={handleAddToCart}>
+                    <Flex flexDirection="row">
+                      <Button
+                        leftIcon={<i className="bi bi-bag-fill" />}
+                        sx={{
+                          borderRightRadius: "0",
+                          borderLeftRadius: "15px",
+                        }}
+                        type="submit"
+                      >
+                        <Text marginTop="4px">Add to cart</Text>
+                      </Button>
+                      <Input
+                        sx={{
+                          borderLeftRadius: "0",
+                          borderRightRadius: "15px",
+                        }}
+                        type="text"
+                        value={quantity}
+                        onChange={(event) => handleQuantityChange(event)}
+                        width="50px"
+                        paddingTop="4px"
+                      />
+                    </Flex>
+                  </form>
+                  {error && (
+                    <Alert status="warning" borderRadius="15px">
+                      <AlertIcon />
+                      You cannot purchase more than 10 tickets
+                    </Alert>
+                  )}
+                </Flex>
               ) : (
                 <LoginButton>Log in to purchase</LoginButton>
               )}

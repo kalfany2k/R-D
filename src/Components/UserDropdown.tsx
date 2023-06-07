@@ -21,19 +21,37 @@ const UserDropdown = () => {
   }, [localStorage.getItem("accessToken")]);
 
   return (
-    <Box
+    <Flex
+      flexDirection="column"
       className="nav-welcome-button-theme"
       paddingRight="10px"
       paddingLeft="3px"
       paddingTop="4px"
       borderRadius="10px"
-      onClick={() => setDropdownOpen(true)}
+      onClick={() => setDropdownOpen(!dropdownOpen)}
+      style={{
+        borderBottomRightRadius: dropdownOpen ? "0" : "15px",
+        borderBottomLeftRadius: dropdownOpen ? "0" : "15px",
+      }}
     >
       <Text fontSize={20} fontWeight="bold" paddingLeft="5px">
         {"Hi, " + data?.last_name + "!"}
       </Text>
-      {dropdownOpen && <Flex></Flex>}
-    </Box>
+      {dropdownOpen && (
+        <Flex
+          flexDirection="column"
+          backgroundColor="green"
+          width="300px"
+          height="300px"
+          position="absolute"
+          zIndex="20"
+          top="55px"
+          right="10px"
+          borderRadius="15px"
+          borderTopRightRadius="0"
+        ></Flex>
+      )}
+    </Flex>
   );
 };
 

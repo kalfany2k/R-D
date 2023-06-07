@@ -8,6 +8,11 @@ import {
 import Home from "./Components/Home";
 import RegisterPage from "./Components/RegisterPage";
 import EventPage from "./Components/EventPage";
+import ProfilePage from "./Components/ProfilePage";
+
+export interface EventQuery {
+  searchText: string;
+}
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -27,10 +32,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path={"/" + sessionToken?.slice(0, 10)} element={<Home />} />
           {isLoggedIn && (
-            <Route
-              path="/"
-              element={<Navigate to={"/" + sessionToken?.slice(0, 10)} />}
-            />
+            <>
+              <Route
+                path="/"
+                element={<Navigate to={"/" + sessionToken?.slice(0, 10)} />}
+              />
+              <Route path="/profile" element={<ProfilePage />} />
+            </>
           )}
 
           <Route path="/register" element={<RegisterPage />} />
