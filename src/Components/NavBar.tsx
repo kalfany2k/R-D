@@ -43,7 +43,7 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
         </Text>
       </div>
 
-      <div style={{ paddingRight: 15 }}>
+      <div style={{ marginRight: 10 }}>
         <Show above="md">
           <NavButtonsPC isLoggedIn={isLoggedIn} />
         </Show>

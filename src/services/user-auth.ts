@@ -1,7 +1,7 @@
 import { useState } from "react";
 import apiClient from "./api-client";
 
-interface User {
+export interface User {
   id: number;
   user: number;
   phone: string;

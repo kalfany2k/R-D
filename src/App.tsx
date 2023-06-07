@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Home from "./Components/Home";
 import RegisterPage from "./Components/RegisterPage";
+import EventPage from "./Components/EventPage";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -31,7 +32,9 @@ function App() {
               element={<Navigate to={"/" + sessionToken?.slice(0, 10)} />}
             />
           )}
+
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/events/:eventId" element={<EventPage />} />
         </Routes>
       </Router>
     </>

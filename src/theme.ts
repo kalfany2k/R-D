@@ -57,6 +57,15 @@ const theme = extendTheme({
         borderRadius: 20,
         color: "black",
       },
+      ".euro-theme": {
+        color: mode("green.700", "greenyellow")(props),
+      },
+      ".event-image-backdrop": {
+        backdropFilter: mode(
+          "blur(10px) brightness(1.2)",
+          "blur(10px) brightness(0.5)"
+        )(props),
+      },
     }),
   },
 });

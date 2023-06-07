@@ -4,6 +4,7 @@ import EventCard from "./EventCard";
 import EventCardContainer from "./EventCardContainer";
 import { Button, Flex, Text } from "@chakra-ui/react";
 import EventCardSkeleton from "./EventCardSkeleton";
+import { Link } from "react-router-dom";
 
 const EventGrid = () => {
   const { data, error, isLoading } = useEvent();
@@ -31,7 +32,9 @@ const EventGrid = () => {
         ))}
       {data.slice(0, displayCount).map((event) => (
         <EventCardContainer key={event.id}>
-          <EventCard event={event} />
+          <Link to={"/events/" + event.id}>
+            <EventCard event={event} />
+          </Link>
         </EventCardContainer>
       ))}
       {displayCount < data.length && (

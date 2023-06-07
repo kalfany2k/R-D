@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import jwtDecode, { JwtPayload } from "jwt-decode";
 import { getUser } from "../services/user-auth";
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { User } from "../Hooks/getUser";
+import { User } from "../services/user-auth";
 
 const UserDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
