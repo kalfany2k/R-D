@@ -13,8 +13,13 @@ import {
 } from "@chakra-ui/react";
 import NavBar from "./NavBar";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import LoginButton from "./LoginButton";
 
-const EventPage = () => {
+interface Props {
+  isLoggedIn: boolean;
+}
+
+const EventPage = ({ isLoggedIn }: Props) => {
   const [event, setEvent] = useState<Event>();
   const { eventId } = useParams();
   const [isMenuActive, setMenuActive] = useState(false);
@@ -122,12 +127,16 @@ const EventPage = () => {
               </HStack>
             </Flex>
             <Flex flexDirection="row" paddingTop="30px" paddingBottom="70px">
-              <Button
-                leftIcon={<i className="bi bi-bag-fill" />}
-                onClick={handleAddToCart}
-              >
-                <Text marginTop="4px">Add to cart</Text>
-              </Button>
+              {isLoggedIn ? (
+                <Button
+                  leftIcon={<i className="bi bi-bag-fill" />}
+                  onClick={handleAddToCart}
+                >
+                  <Text marginTop="4px">Add to cart</Text>
+                </Button>
+              ) : (
+                <LoginButton>Log in to purchase</LoginButton>
+              )}
             </Flex>
           </Flex>
         </GridItem>

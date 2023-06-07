@@ -34,7 +34,10 @@ function App() {
           )}
 
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/events/:eventId" element={<EventPage />} />
+          <Route
+            path="/events/:eventId"
+            element={<EventPage isLoggedIn={isLoggedIn} />}
+          />
         </Routes>
       </Router>
     </>

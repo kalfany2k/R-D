@@ -2,6 +2,7 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import { Text, Button } from "@chakra-ui/react";
 import LoginButton from "./LoginButton";
 import UserDropdown from "./UserDropdown";
+import Cart from "./Cart";
 
 export const navOptionList = ["How it works", "Create an event"];
 
@@ -28,8 +29,14 @@ const NavButtonsPC = ({ isLoggedIn }: Props) => {
           </Text>
         );
       })}
-
-      {isLoggedIn ? <UserDropdown /> : <LoginButton />}
+      {isLoggedIn ? (
+        <>
+          <Cart />
+          <UserDropdown />
+        </>
+      ) : (
+        <LoginButton>Log in</LoginButton>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   Button,
   Text,
@@ -12,7 +12,11 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/user-auth";
 
-const LoginButton = () => {
+interface Props {
+  children: ReactNode;
+}
+
+const LoginButton = ({ children }: Props) => {
   const [isLoginPopupOpen, setLoginPopupOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +43,7 @@ const LoginButton = () => {
         className="nav-log-in-button-theme"
         onClick={() => setLoginPopupOpen(true)}
       >
-        Log in
+        {children}
       </Button>
 
       {isLoginPopupOpen && (
@@ -75,7 +79,7 @@ const LoginButton = () => {
               }}
             >
               <Text fontSize="1xl" fontWeight="bold" paddingLeft="5px">
-                Login
+                Log in
               </Text>
               <i
                 className="bi bi-x"
