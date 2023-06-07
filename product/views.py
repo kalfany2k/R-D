@@ -1,4 +1,6 @@
 import uuid
+
+from location.serializers import LocationSerializer
 from .models import Cart, CartItem, Customer, Event, Order, OrderItem, Category
 from .filters import EventFilter
 from .serializers import (
@@ -8,6 +10,8 @@ from .serializers import (
 )
 from core.serializers import UserCreateSerializer, UserSerializer
 from location.models import Location
+
+
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser 
@@ -15,8 +19,12 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
+from rest_framework.exceptions import APIException
+
+from django.db import transaction
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
+
 # Create your views here.
 
 class CategoryViewSet(ModelViewSet):
@@ -57,21 +65,23 @@ class EventViewSet(ModelViewSet):
         event = request.GET.get('query')
         category_ids = request.query_params.get('category_id')
         
+        if not event and not category_ids:
+            return Response({'message': 'Please provide a query or category id for the search'}, status=status.HTTP_400_BAD_REQUEST)
+
         events = self.queryset  
 
         if category_ids:
             category_ids = category_ids.split(',')
             events = events.filter(category__id__in=category_ids)
 
-        elif event:
+        if event:
             events = events.filter(title__icontains=event)
 
-        serializer = EventSerializer(events, many=True)
-        
-        if events.exists(): 
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
+        if not events:
             return Response({'message': 'No events found matching the search criteria'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
         
 
 
@@ -157,28 +167,36 @@ class CustomerViewSet(ModelViewSet):
             return Response(customer_serializer.data, status=status.HTTP_201_CREATED)
 
 
-    @action(detail=False, methods=['POST'])#, permission_classes=[IsAuthenticated])
+    @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated])
+    @transaction.atomic
     def create_event(self, request):
         event_data = request.data
         location_data = event_data.pop('location', None)
+        location_id = event_data.pop('location_id', None)
 
-        customer = Customer.objects.get(user_id=request.user.id)
-        if location_data:
-            location_id = location_data.pop('id', None)
-            if location_id:
+        if location_id:
+            try:
                 location = Location.objects.get(id=location_id)
-                Location.objects.filter(id=location_id).update(**location_data)
-            else:
-                location = Location.objects.create(**location_data)
+            except Location.DoesNotExist:
+                raise APIException(detail='Invalid location ID.', code=status.HTTP_400_BAD_REQUEST)
+        elif location_data:
+            location_data['id'] = str(uuid.uuid4()) 
+            location_serializer = LocationSerializer(data=location_data)
+            location_serializer.is_valid(raise_exception=True)
+            location = location_serializer.create(location_serializer.validated_data)
         else:
-            location = None
+            raise APIException(detail='Location details are required.', code=status.HTTP_400_BAD_REQUEST)
 
-        event_data['creator'] = customer
-        event_data['location'] = location
+        try:
+            customer = Customer.objects.get(user_id=request.user.id)
+        except Customer.DoesNotExist:
+            raise APIException(detail='No customer associated with the current user.', code=status.HTTP_404_NOT_FOUND)
 
-        serializer = EventSerializer(data=event_data)
-        serializer.is_valid(raise_exception=True)
-        event = serializer.save()
+        event_data['location'] = location.id
+        event_serializer = EventSerializer(data=event_data)
+        event_serializer.is_valid(raise_exception=True)
+        event = event_serializer.create(event_serializer.validated_data)
+
         return Response({'message': 'Event created successfully.'}, status=status.HTTP_201_CREATED)
 
     

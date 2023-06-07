@@ -23,7 +23,9 @@ class EventSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(many=True, read_only=True, slug_field='title')
     class Meta:
         model = Event
-        fields = ['id','title','price', 'location', 'category']
+        fields = ['id','title','price', 'location', 'category', 
+                  'age_restriction', 'start_date', 'end_date',
+                  'price', 'description']
 
 class SimpleEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -156,38 +158,4 @@ class CreateOrderSerializer(serializers.Serializer):
             return order
 
 
-class CreateEventSerializer(serializers.ModelSerializer):
-    location = serializers.PrimaryKeyRelatedField(queryset=Location.objects.all())
 
-    class Meta:
-        model = Event
-        fields = ['title', 'price', 'location']
-
-    def create(self, validated_data):
-        location = validated_data.pop('location')
-        event = Event.objects.create(location=location, **validated_data)
-        return event
-    
-
-
-class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            password=validated_data['password']
-            # Add any other fields you want to set for the User model during registration
-        )
-        # Create the associated Customer instance
-        customer = Customer.objects.create(
-            user=user,
-            phone=validated_data['phone'],
-            birth_date=validated_data['birth_date']
-            # Add any other fields you want to set for the Customer model during registration
-        )
-        return customer
-
-    class Meta:
-        model = User
-        fields = ['username', 'password', 'phone', 'birth_date']
