@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from uuid import uuid4
 from datetime import datetime
+from core.models import User
 from location.models import Location
 
 #from store.validators import validate_file_size
@@ -100,6 +101,7 @@ class Address(models.Model):
 
 
 class Cart(models.Model):
+    #user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
 

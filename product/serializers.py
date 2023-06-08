@@ -19,13 +19,15 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    location = LocationSerializer()
+    location = LocationSerializer(read_only=True)
     category = serializers.SlugRelatedField(many=True, read_only=True, slug_field='title')
+
     class Meta:
         model = Event
-        fields = ['id','title','price', 'location', 'category', 
+        fields = ['id', 'title', 'price', 'location', 'category',
                   'age_restriction', 'start_date', 'end_date',
-                  'price', 'description']
+                  'price', 'description', 'inventory']
+
 
 class SimpleEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -45,53 +47,58 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    
+    user_id = serializers.SerializerMethodField()
     items = CartItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
+
+    def get_user_id(self, cart):
+        return cart.user.id if cart.user else None
 
     def get_total_price(self, cart):
         return sum([item.quantity * item.event.price for item in cart.items.all()])
 
+    class Meta:
+        model = Cart
+        fields = ['user_id', 'items', 'total_price']
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         user = self.context['request'].user
-        if user.is_authenticated:
-            representation['id'] = user.id
+        if not user.is_authenticated:
+            # Exclude user_id field if the user is not authenticated
+            representation.pop('user_id', None)
         return representation
-    
-    class Meta:
-        model = Cart
-        fields = ['id', 'items', 'total_price']
 
 
 
 class AddCartItemSerializer(serializers.ModelSerializer):
-    event_id =serializers.IntegerField()
+    event_id = serializers.IntegerField()
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     def validate_event_id(self, value):
         if not Event.objects.filter(pk=value).exists():
             raise serializers.ValidationError('No event with the given ID was found.')
         return value
 
-            
     def save(self, **kwargs):
-        cart_id = self.context['cart_id']
         event_id = self.validated_data['event_id']
         quantity = self.validated_data['quantity']
+        user = self.validated_data['user']
 
-        try: 
-            cart_item = CartItem.objects.get(cart_id=cart_id, event_id=event_id)
+        try:
+            cart_item = CartItem.objects.get(cart__user=user, event_id=event_id)
             cart_item.quantity += quantity
             cart_item.save()
             self.instance = cart_item
         except CartItem.DoesNotExist:
-            self.instance = CartItem.objects.create(cart_id=cart_id, **self.validated_data)
-        
+            cart = Cart.objects.get(user=user)
+            self.instance = CartItem.objects.create(cart=cart, **self.validated_data)
+
         return self.instance
+
     class Meta:
         model = CartItem
-        fields = ['id','event_id', 'quantity']
-
+        fields = ['id', 'event_id', 'quantity', 'user']
 
 class UpdateCartItemSerializer(serializers.ModelSerializer):
     class Meta:
