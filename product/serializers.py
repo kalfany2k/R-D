@@ -166,7 +166,7 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.Serializer):
-    cart_it = serializers.UUIDField()
+    cart_id = serializers.IntegerField()
 
     def validate_cart_id(self, cart_id):
         if not Cart.objects.filter(pk=cart_id).exists():
@@ -179,23 +179,28 @@ class CreateOrderSerializer(serializers.Serializer):
     def save(self, **kwargs):
         with transaction.atomic():
             customer = Customer.objects.get(user_id=self.context['user_id'])
-            order = Order.objects.create(customer= customer)
-            cart_items = CartItem.objects.select_related('product').filter(cart_id = self.validated_data['cart_id'])
+            cart_id = self.validated_data['cart_id']  # Extract the ID from the validated data
+            order = Order.objects.create(customer=customer)
+            cart_items = CartItem.objects.select_related('event').filter(cart_id=cart_id)
             order_items = [
                 OrderItem(
-                order=order,
-                product = item.product,
-                unit_price = item.product.unit_price,
-                quantity = item.quantity
-                ) for item in cart_items]
-            
+                    order=order,
+                    event=item.event,
+                    unit_price=item.event.price,
+                    quantity=item.quantity
+                ) for item in cart_items
+            ]
+
             OrderItem.objects.bulk_create(order_items)
-            
-            Cart.objects.filter(pk=self.validated_data['cart_id']).delete()
-            
+
+            Cart.objects.filter(pk=cart_id).delete()
+
             order_created.send_robust(self.__class__, order=order)
 
             return order
+
+
+
 
 
 
