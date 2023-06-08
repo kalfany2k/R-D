@@ -13,7 +13,7 @@ from .serializers import (
 from core.serializers import UserCreateSerializer, UserSerializer
 from location.models import Location
 
-
+from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser 
@@ -91,24 +91,27 @@ class EventViewSet(ModelViewSet):
         
 
 
-class CartViewSet(CreateModelMixin,
-                  RetrieveModelMixin,
-                  DestroyModelMixin, GenericViewSet):
-    queryset = Cart.objects.prefetch_related('items__event').all()
-    serializer_class = CartSerializer
-    
-    def create(self, request, *args, **kwargs):
-        # Assign the user ID to the cart
-        user_id = request.user.id
-        cart_data = request.data.copy()
-        cart_data['id'] = user_id
+class CartItemViewSet(viewsets.ModelViewSet):
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
-        serializer = self.get_serializer(data=cart_data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return AddCartItemSerializer
+        elif self.request.method == 'PATCH':
+            return UpdateCartItemSerializer
+        return CartItemSerializer
 
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    def perform_create(self, serializer):
+        cart = self.get_cart()
+        serializer.save(cart=cart)
+
+    def get_cart(self):
+        user = self.request.user
+        if not user.is_authenticated:
+            return None
+
+        cart, created = Cart.objects.get_or_create(user=user)
+        return cart
 
 
 class CartItemViewSet(ModelViewSet):
