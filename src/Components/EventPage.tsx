@@ -54,9 +54,7 @@ const EventPage = ({ isLoggedIn }: Props) => {
     }
   };
 
-  const handleAddToCart = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
+  const handleAddToCart = (ev: React.FormEvent<HTMLFormElement>) => {};
 
   return (
     <div>

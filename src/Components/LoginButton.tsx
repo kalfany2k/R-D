@@ -11,6 +11,7 @@ import {
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/user-auth";
+import { createCart } from "../services/cart-services";
 
 interface Props {
   children: ReactNode;
@@ -31,7 +32,9 @@ const LoginButton = ({ children }: Props) => {
 
     login(username, password).then(() => {
       navigate("/" + localStorage.getItem("sessionToken")?.substring(0, 10));
+
       window.location.reload();
+      createCart();
     });
   };
 

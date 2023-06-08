@@ -66,6 +66,15 @@ const theme = extendTheme({
           "blur(10px) brightness(0.5)"
         )(props),
       },
+      ".event-page-categories": {
+        fontSize: { base: "15px", md: "20px", lg: "25px" },
+        flexDirection: { base: "column", md: "row" },
+        backgroundColor: mode("#8bd3dd80", "#e26e5d80")(props),
+        borderRadius: "20px",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+        paddingTop: "10px",
+      },
     }),
   },
 });

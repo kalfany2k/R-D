@@ -7,19 +7,23 @@ export interface Event {
   price: number;
   location: Location;
   category: string[];
+  age_restriction: string;
+  start_date: string;
+  end_date: string;
+  description: string;
 }
 
 export interface Location {
   id: number;
   name: string;
   address: string;
-  rating: string;
+  rating: number;
   city: string;
 }
 
-const useEvent = (eventQuery: EventQuery) =>
+const useEvent = (eventQuery: EventQuery, searchEmpty: boolean) =>
   useData<Event>(
-    "/product/events",
+    searchEmpty ? "/product/events" : "/product/events/search_events",
     {
       params: { searchText: eventQuery.searchText },
     },

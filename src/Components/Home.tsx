@@ -4,10 +4,12 @@ import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
 import EventGrid from "./EventGrid";
 import { EventQuery } from "../App";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const [isMenuActive, setMenuActive] = useState(false);
   const [eventQuery, setEventQuery] = useState<EventQuery>({} as EventQuery);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -32,9 +34,10 @@ function Home() {
             setMenuActive={() => setMenuActive(!isMenuActive)}
           />
           <SearchBar
-            onInput={(searchText) =>
-              setEventQuery({ ...eventQuery, searchText })
-            }
+            onInput={(searchText) => {
+              setEventQuery({ ...eventQuery, searchText });
+              navigate("/events/search_events/" + searchText);
+            }}
           />
         </GridItem>
 
@@ -46,7 +49,6 @@ function Home() {
         >
           <EventGrid eventQuery={eventQuery} />
         </GridItem>
-        <Text>{eventQuery.searchText}</Text>
       </Grid>
     </div>
   );

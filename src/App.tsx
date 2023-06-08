@@ -46,6 +46,7 @@ function App() {
             path="/events/:eventId"
             element={<EventPage isLoggedIn={isLoggedIn} />}
           />
+          <Route path="/events/search_events/:searchText" element={<Home />} />
         </Routes>
       </Router>
     </>

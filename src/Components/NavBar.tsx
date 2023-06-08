@@ -3,6 +3,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import NavButtonsPC from "./NavButtonsPC";
 import NavButtonsPhone from "./NavButtonsPhone";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   setMenuActive: () => void;
@@ -11,6 +12,7 @@ interface Props {
 
 const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (
@@ -27,11 +29,13 @@ const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
       className="nav-buttons-responsive"
     >
       <div
+        onClick={() => navigate("/")}
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           paddingLeft: 15,
+          cursor: "pointer",
         }}
       >
         <i

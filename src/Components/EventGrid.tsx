@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useEvent from "../Hooks/useEvent";
 import EventCard from "./EventCard";
 import EventCardContainer from "./EventCardContainer";
@@ -12,9 +12,14 @@ interface Props {
 }
 
 const EventGrid = ({ eventQuery }: Props) => {
-  const { data, error, isLoading } = useEvent(eventQuery);
+  const [searchEmpty, setSearchEmpty] = useState(true);
+  const { data, error, isLoading } = useEvent(eventQuery, searchEmpty);
   const [displayCount, setDisplayCount] = useState(5);
   const skeletons = [1, 2, 3, 4, 5];
+
+  useEffect(() => {
+    if (eventQuery.searchText !== null) setSearchEmpty(false);
+  }, [eventQuery.searchText]);
 
   const handleShowMore = () => {
     setDisplayCount(displayCount + 5);
@@ -35,13 +40,14 @@ const EventGrid = ({ eventQuery }: Props) => {
             <EventCardSkeleton />
           </EventCardContainer>
         ))}
-      {data.slice(0, displayCount).map((event) => (
-        <EventCardContainer key={event.id}>
-          <Link to={"/events/" + event.id}>
-            <EventCard event={event} />
-          </Link>
-        </EventCardContainer>
-      ))}
+      {!isLoading &&
+        data.slice(0, displayCount).map((event) => (
+          <EventCardContainer key={event.id}>
+            <Link to={"/events/" + event.id}>
+              <EventCard event={event} />
+            </Link>
+          </EventCardContainer>
+        ))}
       {displayCount < data.length && (
         <Button onClick={handleShowMore} marginBottom={5}>
           Show more

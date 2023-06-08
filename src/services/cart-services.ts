@@ -1,7 +1,15 @@
-interface Cart {
-  created;
+import apiClient from "./api-client";
+
+export interface Cart {
+  created_at: string;
 }
 
-interface CartItem {}
+export interface CartItem {
+  cart: number;
+  event_id: number;
+  quantity: number;
+}
 
-const addToCart;
+export const createCart = () => {
+  apiClient.post("/product/carts");
+};
