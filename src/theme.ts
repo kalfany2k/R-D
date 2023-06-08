@@ -48,8 +48,8 @@ const theme = extendTheme({
         bg: mode("secondarySiteColor", "secondarySiteColorDark")(props),
       },
       ".nav-welcome-button-theme": {
-        backgroundColor: mode("secondarySiteColor", "#0c2d3e80")(props),
-        _hover: { backgroundColor: mode("#1f77a380", "#69b9cb")(props) },
+        backgroundColor: mode("#829ce3", "#0c2d3e80")(props),
+        _hover: { backgroundColor: mode("#98aee6", "#829ce380")(props) },
         cursor: "pointer",
       },
       ".search-bar-theme": {
@@ -74,6 +74,9 @@ const theme = extendTheme({
         paddingLeft: "10px",
         paddingRight: "10px",
         paddingTop: "10px",
+      },
+      ".dropdown-options-hover": {
+        _hover: { backgroundColor: mode("#adbfebBF", "#97ade7BF")(props) },
       },
     }),
   },

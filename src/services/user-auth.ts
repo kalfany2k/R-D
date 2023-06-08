@@ -10,13 +10,17 @@ export interface User {
   last_name: string;
 }
 
-export const login = (username: string, password: string) => {
-  return apiClient
-    .post("/auth/jwt/create", { username, password })
-    .then((response) => {
-      localStorage.setItem("accessToken", response.data.access);
-      localStorage.setItem("sessionToken", response.data.refresh);
+export const login = async (username: string, password: string) => {
+  try {
+    const response = await apiClient.post("/auth/jwt/create", {
+      username,
+      password,
     });
+    localStorage.setItem("accessToken", response.data.access);
+    localStorage.setItem("sessionToken", response.data.refresh);
+  } catch (error) {
+    console.log("login failed");
+  }
 };
 
 export const register = (

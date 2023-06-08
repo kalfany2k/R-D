@@ -30,16 +30,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path={"/" + sessionToken?.slice(0, 10)} element={<Home />} />
-          {isLoggedIn && (
-            <>
-              <Route
-                path="/"
-                element={<Navigate to={"/" + sessionToken?.slice(0, 10)} />}
-              />
-              <Route path="/profile" element={<ProfilePage />} />
-            </>
-          )}
+          {isLoggedIn && <Route path="/:sessionId" element={<Home />} />}
 
           <Route path="/register" element={<RegisterPage />} />
           <Route

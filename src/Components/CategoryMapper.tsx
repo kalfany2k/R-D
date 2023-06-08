@@ -49,13 +49,14 @@ const CategoryMapper = ({ eventId }: Props) => {
       gap={4}
       marginTop="5px"
       marginBottom="30px"
-      paddingBottom="10px"
+      paddingBottom="7px"
+      paddingTop="12px"
       className="event-page-categories"
       alignItems="center"
       justifyContent="center"
     >
       {categoryList.map((category) => (
-        <Flex gap={1}>
+        <Flex gap={1} key={category.label}>
           <i className={category.value} style={{ fontSize: "25px" }} />
           <Text fontSize={22} marginTop="3px">
             {category.label}
