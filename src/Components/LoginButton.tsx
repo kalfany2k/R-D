@@ -31,8 +31,6 @@ const LoginButton = ({ children }: Props) => {
     event.preventDefault();
 
     login(username, password).then(() => {
-      navigate("/" + localStorage.getItem("sessionToken")?.substring(0, 10));
-
       window.location.reload();
       createCart();
     });
@@ -65,10 +63,10 @@ const LoginButton = ({ children }: Props) => {
           <div
             style={{
               position: "fixed",
-              top: "40%",
+              top: "35%",
               left: "40%",
-              width: "20%",
-              height: "20%",
+              width: "20vw",
+              height: "auto",
               zIndex: "10",
             }}
           >
