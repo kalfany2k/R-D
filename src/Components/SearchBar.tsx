@@ -21,7 +21,7 @@ const SearchBar = ({ onInput }: Props) => {
       paddingBottom="50px"
       zIndex="-1"
     >
-      <Text fontSize="2xl" fontWeight="semibold">
+      <Text fontSize="4xl" fontWeight="bold">
         The best ticket marketplace
       </Text>
       <form
@@ -32,7 +32,14 @@ const SearchBar = ({ onInput }: Props) => {
         }}
       >
         <InputGroup className="search-bar-theme">
-          <InputLeftElement children={<i className="bi bi-search" />} />
+          <InputLeftElement
+            children={<i className="bi bi-search" />}
+            onClick={(event) => {
+              event.preventDefault();
+              if (ref.current) onInput(ref.current.value);
+            }}
+            cursor="pointer"
+          />
           <Input
             ref={ref}
             borderRadius={20}

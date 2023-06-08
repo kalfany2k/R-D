@@ -43,7 +43,7 @@ const EventGrid = ({ eventQuery }: Props) => {
       {!isLoading &&
         data.slice(0, displayCount).map((event) => (
           <EventCardContainer key={event.id}>
-            <Link to={"/events/" + event.id}>
+            <Link to={"/events/event/" + event.id}>
               <EventCard event={event} />
             </Link>
           </EventCardContainer>

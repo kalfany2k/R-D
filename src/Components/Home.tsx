@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import EventGrid from "./EventGrid";
 import { EventQuery } from "../App";
 import { useNavigate } from "react-router-dom";
+import CategorySelector from "./CategorySelector";
 
 function Home() {
   const [isMenuActive, setMenuActive] = useState(false);
@@ -47,6 +48,11 @@ function Home() {
           marginTop="300px"
           height="calc(100vh - 300)"
         >
+          <CategorySelector
+            handleSelectCategory={(categories) => {
+              setEventQuery({ ...eventQuery, categories });
+            }}
+          />
           <EventGrid eventQuery={eventQuery} />
         </GridItem>
       </Grid>

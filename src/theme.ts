@@ -18,6 +18,7 @@ const theme = extendTheme({
     sm: "30em", // 480px
     md: "48em", // 768px
     lg: "62em", // 992px
+    lgXl: "65em",
     xl: "80em", // 1280px
   },
   styles: {
@@ -77,6 +78,34 @@ const theme = extendTheme({
       },
       ".dropdown-options-hover": {
         _hover: { backgroundColor: mode("#adbfebBF", "#97ade7BF")(props) },
+      },
+      ".profile-background": {
+        backgroundColor: mode(
+          "rgba(255, 255, 255, 0.3)",
+          "rgba(0, 0, 0, 0.3)"
+        )(props),
+      },
+      ".profile-back-button": {
+        backgroundColor: mode(
+          "rgba(255, 255, 255, 0.7)",
+          "rgba(0, 0, 0, 0.7)"
+        )(props),
+        _hover: {
+          backgroundColor: mode(
+            "rgba(255, 255, 255, 0.9)",
+            "rgba(0, 0, 0, 0.9)"
+          )(props),
+        },
+      },
+      ".category-buttons": {
+        backgroundColor: mode("#829ce3", "#e26e5d")(props),
+        _hover: { backgroundColor: mode("#98aee6", "#ec9f93")(props) },
+        cursor: "pointer",
+      },
+      ".event-cards": {
+        backgroundColor: mode("#97ade7", "#e88b7d")(props),
+        _hover: { backgroundColor: mode("#839ce2", "#e47867")(props) },
+        cursor: "pointer",
       },
     }),
   },

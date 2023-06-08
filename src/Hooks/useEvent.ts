@@ -25,7 +25,10 @@ const useEvent = (eventQuery: EventQuery, searchEmpty: boolean) =>
   useData<Event>(
     searchEmpty ? "/product/events" : "/product/events/search_events",
     {
-      params: { searchText: eventQuery.searchText },
+      params: {
+        searchText: eventQuery.searchText,
+        categories: eventQuery.categories,
+      },
     },
     [eventQuery]
   );

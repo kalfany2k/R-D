@@ -8,6 +8,19 @@ interface Props {
   eventId: number;
 }
 
+export const categories = [
+  { value: "bi bi-music-note", label: "Music" },
+  { value: "bi bi-trophy-fill", label: "Sports" },
+  { value: "bi bi-palette-fill", label: "Arts" },
+  { value: "bi bi-easel", label: "Theatre" },
+  { value: "bi bi-people-fill", label: "Workshop and Conferences" },
+  { value: "bi bi-cup-fill", label: "Food and drinks" },
+  { value: "bi bi-heart-pulse-fill", label: "Health and Wellness" },
+  { value: "bi bi-currency-exchange", label: "Charity and Fundraising" },
+  { value: "bi bi-emoji-smile-fill", label: "Comedy" },
+  { value: "bi bi-mortarboard-fill", label: "Educational" },
+];
+
 // Music, Sports, Arts and Theatre, Workshops and Conferences, Food and Drinks, Health and Wellness, Charity and Fundraising, Comedy, Educational
 const CategoryMapper = ({ eventId }: Props) => {
   const [event, setEvent] = useState<Event>();
@@ -25,19 +38,6 @@ const CategoryMapper = ({ eventId }: Props) => {
     };
     fetchEvent();
   }, [eventId]);
-
-  const categories = [
-    { value: "bi bi-music-note", label: "Music" },
-    { value: "bi bi-trophy-fill", label: "Sports" },
-    { value: "bi bi-palette-fill", label: "Arts" },
-    { value: "bi bi-easel", label: "Theatre" },
-    { value: "bi bi-people-fill", label: "Workshop and Conferences" },
-    { value: "bi bi-cup-fill", label: "Food and drinks" },
-    { value: "bi bi-heart-pulse-fill", label: "Health and Wellness" },
-    { value: "bi bi-currency-exchange", label: "Charity and Fundraising" },
-    { value: "bi bi-emoji-smile-fill", label: "Comedy" },
-    { value: "bi bi-mortarboard-fill", label: "Educational" },
-  ];
 
   const categoryList = categories.filter((categItem) => {
     return event?.category.includes(categItem.label);

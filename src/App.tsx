@@ -9,9 +9,11 @@ import Home from "./Components/Home";
 import RegisterPage from "./Components/RegisterPage";
 import EventPage from "./Components/EventPage";
 import ProfilePage from "./Components/ProfilePage";
+import NotFoundPage from "./Components/NotFoundPage";
 
 export interface EventQuery {
   searchText: string;
+  categories: string;
 }
 
 function App() {
@@ -30,14 +32,17 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          {isLoggedIn && <Route path="/:sessionId" element={<Home />} />}
+          {isLoggedIn && (
+            <Route path="/profile/:sessionId" element={<ProfilePage />} />
+          )}
 
           <Route path="/register" element={<RegisterPage />} />
           <Route
-            path="/events/:eventId"
+            path="/events/event/:eventId"
             element={<EventPage isLoggedIn={isLoggedIn} />}
           />
           <Route path="/events/search_events/:searchText" element={<Home />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </>

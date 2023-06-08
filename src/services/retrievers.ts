@@ -1,5 +1,5 @@
+import { useState } from "react";
 import apiClient from "../services/api-client";
-import Event from "../Hooks/useEvent";
 
 export const getEvent = (eventId: string) => {
   return apiClient
