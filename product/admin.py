@@ -104,22 +104,26 @@ class CategoryAdmin(admin.ModelAdmin):
          verbose_name = 'category'
          verbose_name_plural = 'Categories'
 
-@admin.register(models.EventCreator)
-class EventCreatorAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'birth_date', 'user')
-
-
 
 class OrderItemInline(admin.TabularInline):
-    autocomplete_fields = ['event']
-    min_num = 1
-    max_num = 10
     model = models.OrderItem
-    extra = 0
+    autocomplete_fields = ['event']
 
 
 @admin.register(models.Order)
 class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer']
-    inlines = [OrderItemInline]
+    inlines = [OrderItemInline] 
     list_display = ['id', 'placed_at', 'customer']
+   
+
+class CartItemInline(admin.TabularInline):
+    model = models.CartItem
+    autocomplete_fields = ['event']
+
+
+@admin.register(models.Cart)
+class CartAdmin(admin.ModelAdmin):
+    inlines = [CartItemInline] 
+    list_display = ['id']
+   
