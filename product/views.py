@@ -57,7 +57,6 @@ class EventViewSet(ModelViewSet):
     def get_serializer_context(self):
         return {'request': self.request}
     
-    
     def destroy(self, request, *args, **kwargs):
         if OrderItem.objects.filter(event = kwargs['pk']).count() > 0:
              return Response({'error':'Event cannot be deleted'},status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -101,7 +100,7 @@ class CartViewSet(CreateModelMixin,
 
 class CartItemViewSet(ModelViewSet):
     http_method_names = ['get','post','patch','delete']
-    def get_serializer_class(self):
+    def get_serializer_class(self): 
         if self.request.method == 'POST':
             return AddCartItemSerializer
         elif self.request.method == 'PATCH':
