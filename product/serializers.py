@@ -82,7 +82,8 @@ class AddCartItemSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'request' in self.context:
-            self.fields['cart'].default = Cart.objects.get(customer=self.context['request'].user.customer)
+            self.fields['cart'].default = self.context['request'].user.customer.carts.last()
+
     
     def validate_event_id(self, value):
         if not Event.objects.filter(pk=value).exists():
@@ -92,22 +93,26 @@ class AddCartItemSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         event_id = self.validated_data.pop('event_id')
         quantity = self.validated_data['quantity']
-        cart = self.validated_data['cart']
+        cart = self.context['request'].user.customer.carts.last()
 
         # Fetch the event with the given event_id
         event = Event.objects.get(id=event_id)
 
-        try:
-            cart_item = CartItem.objects.get(cart=cart, event=event)
+        
+        cart_item = CartItem.objects.filter(cart=cart, event=event).first()
+        if cart_item is None:
+        # If no cart_item was found, create a new one
+            self.validated_data['event'] = event
+            self.instance = CartItem.objects.create(cart=cart, event=event, quantity=quantity)
+        else:
+            # If a cart_item was found, update its quantity
             cart_item.quantity += quantity
             cart_item.save()
             self.instance = cart_item
-        except CartItem.DoesNotExist:
-            # Assign the fetched event instance to CartItem.event
-            self.validated_data['event'] = event
-            self.instance = CartItem.objects.create(cart=cart, event=event, quantity=quantity)
-
+    
         return self.instance
+
+        
 
 
     class Meta:
