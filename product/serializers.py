@@ -45,13 +45,20 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField(read_only=True)
+    
     items = CartItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
 
     def get_total_price(self, cart):
         return sum([item.quantity * item.event.price for item in cart.items.all()])
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        user = self.context['request'].user
+        if user.is_authenticated:
+            representation['id'] = user.id
+        return representation
+    
     class Meta:
         model = Cart
         fields = ['id', 'items', 'total_price']
