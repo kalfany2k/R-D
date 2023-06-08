@@ -55,7 +55,7 @@ class CartSerializer(serializers.ModelSerializer):
         return cart.customer_id if cart.customer else None
 
     def get_total_price(self, cart):
-        return sum([item.quantity * item.event.unit_price for item in cart.cart_items.all()])
+        return sum([item.quantity * item.event.price for item in cart.cart_items.all()])
 
 
     class Meta:

@@ -93,9 +93,9 @@ class EventViewSet(ModelViewSet):
 
 
 class CartViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
-    queryset = Cart.objects.prefetch_related('items__event').all()
+    queryset = Cart.objects.prefetch_related('cart_items__event').all()
     serializer_class = CartSerializer
-
+    
     def create(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not hasattr(request.user, 'customer'):
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
