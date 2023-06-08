@@ -1,5 +1,7 @@
 import uuid
 
+from django.shortcuts import get_object_or_404
+
 from location.serializers import LocationSerializer
 from .models import Cart, CartItem, Customer, Event, Order, OrderItem, Category
 from .filters import EventFilter
@@ -55,24 +57,28 @@ class EventViewSet(ModelViewSet):
     def get_serializer_context(self):
         return {'request': self.request}
     
+    
     def destroy(self, request, *args, **kwargs):
         if OrderItem.objects.filter(event = kwargs['pk']).count() > 0:
              return Response({'error':'Event cannot be deleted'},status=status.HTTP_405_METHOD_NOT_ALLOWED)
         return super().destroy(request, *args, **kwargs)
     
+    # used for search bar
     @action(detail=False, methods=['GET'])
     def search_events(self, request):
-        event = request.query_params.get('query')
-        category_ids = request.query_params.get('category_id')
+        event = request.query_params.get('searchText')
+        category_names = request.query_params.get('categories')
 
-        if (not event or event.isspace()) and (not category_ids or all(x.isspace() for x in category_ids.split(','))):
-            return Response({'message': 'Please provide a query or category id for the search'}, status=status.HTTP_400_BAD_REQUEST)
+        if (not event or event.isspace()) and (not category_names or all(x.isspace() for x in category_names.split(','))):
+            return Response({'message': 'Please provide a query or category name for the search'}, status=status.HTTP_400_BAD_REQUEST)
 
         events = self.queryset
 
-        if category_ids:
-            category_ids = [x for x in category_ids.split(',') if x and not x.isspace()]
-            if category_ids:
+        if category_names:
+            category_names = [x.strip() for x in category_names.split(',') if x and not x.isspace()]
+            if category_names:
+                # Retrieve the category IDs based on the category names
+                category_ids = [get_object_or_404(Category, name=name).id for name in category_names]
                 events = events.filter(category__id__in=category_ids)
 
         if event and not event.isspace():
@@ -83,7 +89,6 @@ class EventViewSet(ModelViewSet):
 
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
         
 
 
@@ -124,6 +129,7 @@ class CustomerViewSet(ModelViewSet):
              serializer.save()
              return Response(serializer.data)
     
+    # to see all the orders
     @action(detail=False, methods=['GET'], permission_classes=[IsAuthenticated])
     def history(self, request):
         customer = Customer.objects.get(user_id=request.user.id)
@@ -135,6 +141,7 @@ class CustomerViewSet(ModelViewSet):
         
         return Response(serializer.data)
     
+    # to register an user and/ a customer, we can have users that are not customers(staff)
     @action(detail=False, methods=['POST'])
     def register(self, request):
         if self.request.user.is_authenticated:
@@ -168,7 +175,7 @@ class CustomerViewSet(ModelViewSet):
             customer = customer_serializer.save()
             return Response(customer_serializer.data, status=status.HTTP_201_CREATED)
 
-
+    # to create an event at a location in the database or to a new location
     @action(detail=False, methods=['POST'], permission_classes=[IsAuthenticated])
     @transaction.atomic
     def create_event(self, request):
@@ -247,6 +254,7 @@ class CustomerViewSet(ModelViewSet):
 #      def list(self, request, *args, **kwargs):
 #         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+# depending on the request type we get, we can have different actions
 class OrderViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
