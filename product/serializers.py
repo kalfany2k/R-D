@@ -38,72 +38,90 @@ class CartItemSerializer(serializers.ModelSerializer):
     event = EventSerializer()
     total_price = serializers.SerializerMethodField()
 
-    def get_total_price(self, cart_item: CartItem):
+    def get_total_price(self, cart_item):
         return cart_item.quantity * cart_item.event.price
 
     class Meta:
         model = CartItem
-        fields = ['id', 'event','quantity', 'total_price']
+        fields = ['id', 'event', 'quantity', 'total_price']
 
 
 class CartSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
-    user_id = serializers.SerializerMethodField()
+    customer_id = serializers.SerializerMethodField()
     items = CartItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
 
-    def get_user_id(self, cart):
-        return cart.user.id if cart.user else None
+    def get_customer_id(self, cart):
+        return cart.customer_id if cart.customer else None
 
     def get_total_price(self, cart):
-        return sum([item.quantity * item.event.price for item in cart.items.all()])
+        return sum([item.quantity * item.event.unit_price for item in cart.cart_items.all()])
+
 
     class Meta:
         model = Cart
-        fields = ['user', 'user_id', 'items', 'total_price']
+        fields = ['id', 'customer', 'customer_id', 'items', 'total_price']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         user = self.context['request'].user
         if not user.is_authenticated:
-            # Exclude user_id field if the user is not authenticated
-            representation.pop('user_id', None)
+            # Exclude customer_id field if the user is not authenticated
+            representation.pop('customer_id', None)
         return representation
-
 
 
 class AddCartItemSerializer(serializers.ModelSerializer):
     event_id = serializers.IntegerField()
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
+    def get_customer_cart(self, user):
+        return Cart.objects.get_or_create(customer=user.customer)[0]
+
+    cart = serializers.HiddenField(default=None)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'request' in self.context:
+            self.fields['cart'].default = Cart.objects.get(customer=self.context['request'].user.customer)
+    
     def validate_event_id(self, value):
         if not Event.objects.filter(pk=value).exists():
             raise serializers.ValidationError('No event with the given ID was found.')
         return value
 
     def save(self, **kwargs):
-        event_id = self.validated_data['event_id']
+        event_id = self.validated_data.pop('event_id')
         quantity = self.validated_data['quantity']
-        user = self.validated_data['user']
+        cart = self.validated_data['cart']
+
+        # Fetch the event with the given event_id
+        event = Event.objects.get(id=event_id)
 
         try:
-            cart_item = CartItem.objects.get(cart__user=user, event_id=event_id)
+            cart_item = CartItem.objects.get(cart=cart, event=event)
             cart_item.quantity += quantity
             cart_item.save()
             self.instance = cart_item
         except CartItem.DoesNotExist:
-            cart = Cart.objects.get(user=user)
-            self.instance = CartItem.objects.create(cart=cart, **self.validated_data)
+            # Assign the fetched event instance to CartItem.event
+            self.validated_data['event'] = event
+            self.instance = CartItem.objects.create(cart=cart, event=event, quantity=quantity)
 
         return self.instance
 
+
     class Meta:
         model = CartItem
-        fields = ['id', 'event_id', 'quantity', 'user']
+        fields = ['id', 'event_id', 'quantity', 'cart']
+
 
 class UpdateCartItemSerializer(serializers.ModelSerializer):
+    
+    def update(self, instance, validated_data):
+        new_quantity = validated_data['quantity']
+        instance.quantity += new_quantity
+        instance.save()
+        return instance
     class Meta:
         model = CartItem
         fields = ['quantity']

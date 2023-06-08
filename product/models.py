@@ -8,6 +8,8 @@ from datetime import datetime
 from core.models import User
 from location.models import Location
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 #from store.validators import validate_file_size
 
 
@@ -101,12 +103,11 @@ class Address(models.Model):
 
 
 class Cart(models.Model):
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')  # Update related_name
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1)]

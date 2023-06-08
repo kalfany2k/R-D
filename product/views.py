@@ -13,7 +13,7 @@ from .serializers import (
 from core.serializers import UserCreateSerializer, UserSerializer
 from location.models import Location
 
-from rest_framework import viewsets
+
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser 
@@ -22,7 +22,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 from rest_framework.exceptions import APIException
-
+from rest_framework.viewsets import GenericViewSet, mixins
 from django.db import transaction
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
@@ -70,14 +70,15 @@ class EventViewSet(ModelViewSet):
 
         if (not event or event.isspace()) and (not category_names or all(x.isspace() for x in category_names.split(','))):
             return Response({'message': 'Please provide a query or category name for the search'}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         events = self.queryset
 
         if category_names:
             category_names = [x.strip() for x in category_names.split(',') if x and not x.isspace()]
             if category_names:
+                
                 # Retrieve the category IDs based on the category names
-                category_ids = [get_object_or_404(Category, name=name).id for name in category_names]
+                category_ids = [get_object_or_404(Category, title=name).id for name in category_names]
                 events = events.filter(category__id__in=category_ids)
 
         if event and not event.isspace():
@@ -91,31 +92,29 @@ class EventViewSet(ModelViewSet):
         
 
 
-class CartItemViewSet(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post', 'patch', 'delete']
+class CartViewSet(CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, GenericViewSet):
+    queryset = Cart.objects.prefetch_related('items__event').all()
+    serializer_class = CartSerializer
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return AddCartItemSerializer
-        elif self.request.method == 'PATCH':
-            return UpdateCartItemSerializer
-        return CartItemSerializer
-
-    def perform_create(self, serializer):
-        cart = self.get_cart()
-        serializer.save(cart=cart)
-
-    def get_cart(self):
-        user = self.request.user
-        if not user.is_authenticated:
-            return None
-
-        cart, created = Cart.objects.get_or_create(user=user)
-        return cart
-
-
+    def create(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not hasattr(request.user, 'customer'):
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
+            
+        customer = request.user.customer
+        cart_data = {'customer': customer.id}
+        serializer = self.get_serializer(data=cart_data)
+        serializer.is_valid(raise_exception=True)
+        
+        with transaction.atomic():  # Use atomic transaction to ensure consistent data
+            cart = serializer.save()
+            cart.refresh_from_db()  # Reload the cart object with related items
+            
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
 class CartItemViewSet(ModelViewSet):
-    http_method_names = ['get','post','patch','delete']
+    http_method_names = ['get', 'post', 'patch', 'delete']
+    
     def get_serializer_class(self): 
         if self.request.method == 'POST':
             return AddCartItemSerializer
@@ -124,10 +123,12 @@ class CartItemViewSet(ModelViewSet):
         return CartItemSerializer
 
     def get_serializer_context(self):
-        return{'cart_id':self.kwargs['cart_pk']}
+        context = super().get_serializer_context()
+        context['cart_id'] = self.kwargs['cart_pk']
+        return context
 
     def get_queryset(self):
-        return CartItem.objects.filter(cart_id = self.kwargs['cart_pk']).select_related('event')
+        return CartItem.objects.filter(cart_id=self.kwargs['cart_pk']).select_related('event')
 
 class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.all()
