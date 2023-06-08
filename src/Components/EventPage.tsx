@@ -17,6 +17,7 @@ import {
 import NavBar from "./NavBar";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoginButton from "./LoginButton";
+import CategoryMapper from "./CategoryMapper";
 
 interface Props {
   isLoggedIn: boolean;
@@ -33,8 +34,8 @@ const EventPage = ({ isLoggedIn }: Props) => {
     const fetchEvent = async () => {
       try {
         if (eventId) {
-          const user = await getEvent(eventId);
-          setEvent(user);
+          const event = await getEvent(eventId);
+          setEvent(event);
         }
       } catch (error) {
         console.log("error");
@@ -111,6 +112,8 @@ const EventPage = ({ isLoggedIn }: Props) => {
             >
               {event?.title}
             </Text>
+
+            <CategoryMapper eventId={event?.id ?? 0} />
             <Flex
               flexDirection={{ base: "column", md: "row" }}
               gap="20px"
@@ -152,7 +155,7 @@ const EventPage = ({ isLoggedIn }: Props) => {
                   gap="10px"
                 >
                   <form onSubmit={handleAddToCart}>
-                    <Flex flexDirection="row">
+                    <Flex flexDirection="row" color="white">
                       <Button
                         leftIcon={<i className="bi bi-bag-fill" />}
                         sx={{
@@ -173,6 +176,8 @@ const EventPage = ({ isLoggedIn }: Props) => {
                         onChange={(event) => handleQuantityChange(event)}
                         width="50px"
                         paddingTop="4px"
+                        placeholder="0"
+                        _placeholder={{ color: "white" }}
                       />
                     </Flex>
                   </form>
