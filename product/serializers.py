@@ -47,6 +47,9 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
     user_id = serializers.SerializerMethodField()
     items = CartItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
@@ -59,7 +62,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['user_id', 'items', 'total_price']
+        fields = ['user', 'user_id', 'items', 'total_price']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
