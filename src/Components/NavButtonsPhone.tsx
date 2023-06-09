@@ -1,6 +1,6 @@
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { VStack } from "@chakra-ui/react";
-import Cart from "./Cart";
+import Cart from "./CartComponent";
 import { useState } from "react";
 
 interface Props {

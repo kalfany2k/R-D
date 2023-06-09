@@ -11,9 +11,9 @@ const CategorySelector = ({ handleSelectCategory }: Props) => {
     <Flex width="100vw" alignItems="center" justifyContent="center">
       <SimpleGrid
         paddingTop="20px"
-        columns={{ base: 5, lgXl: 5, xl: 10 }}
-        paddingLeft={{ base: "5px", md: "50px" }}
-        paddingRight={{ base: "5px", md: "50px" }}
+        columns={{ base: 5, lgXl: 5, xl: 9 }}
+        paddingLeft={{ base: "15px", sm: "35px", md: "50px" }}
+        paddingRight={{ base: "20px", md: "50px" }}
         gap={4}
         w={{
           sm: "container.sm",

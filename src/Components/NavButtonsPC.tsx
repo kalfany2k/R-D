@@ -2,7 +2,7 @@ import ColorModeSwitch from "./ColorModeSwitch";
 import { Text, Button } from "@chakra-ui/react";
 import LoginButton from "./LoginButton";
 import UserDropdown from "./UserDropdown";
-import Cart from "./Cart";
+import Cart from "./CartComponent";
 
 export const navOptionList = ["How it works", "Create an event"];
 

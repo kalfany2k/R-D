@@ -17,7 +17,7 @@ const UserDropdown = () => {
   };
 
   const handleVisitProfile = () => {
-    navigate("/" + localStorage.getItem("sessionToken")?.slice(0, 10));
+    navigate("/profile/" + localStorage.getItem("sessionToken")?.slice(0, 10));
   };
 
   useEffect(() => {
@@ -109,6 +109,3 @@ const UserDropdown = () => {
 };
 
 export default UserDropdown;
-function useHook(arg0: () => void) {
-  throw new Error("Function not implemented.");
-}

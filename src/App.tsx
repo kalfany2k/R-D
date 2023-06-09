@@ -10,6 +10,7 @@ import RegisterPage from "./Components/RegisterPage";
 import EventPage from "./Components/EventPage";
 import ProfilePage from "./Components/ProfilePage";
 import NotFoundPage from "./Components/NotFoundPage";
+import OrderHistoryPage from "./Components/OrderHistoryPage";
 
 export interface EventQuery {
   searchText: string;
@@ -42,6 +43,10 @@ function App() {
             element={<EventPage isLoggedIn={isLoggedIn} />}
           />
           <Route path="/events/search_events/:searchText" element={<Home />} />
+          <Route
+            path={"/" + ":sessionId" + "/order-history"}
+            element={<OrderHistoryPage />}
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

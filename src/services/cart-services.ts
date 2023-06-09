@@ -1,15 +1,16 @@
-import apiClient from "./api-client";
+import { Event } from "../Hooks/useEvent";
 
 export interface Cart {
-  created_at: string;
+  id: number;
+  customer: number;
+  customer_id: number;
+  total_price: number;
+  events: Event[];
 }
 
 export interface CartItem {
-  cart: number;
-  event_id: number;
+  id: number;
+  event: Event;
+  price: number;
   quantity: number;
 }
-
-export const createCart = () => {
-  apiClient.post("/product/carts");
-};

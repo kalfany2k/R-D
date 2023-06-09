@@ -13,11 +13,13 @@ import {
   Image,
   Input,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import NavBar from "./NavBar";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoginButton from "./LoginButton";
 import CategoryMapper from "./CategoryMapper";
+import apiClient from "../services/api-client";
 
 interface Props {
   isLoggedIn: boolean;
@@ -54,7 +56,41 @@ const EventPage = ({ isLoggedIn }: Props) => {
     }
   };
 
-  const handleAddToCart = (ev: React.FormEvent<HTMLFormElement>) => {};
+  const addToCart = async (
+    event_id: number,
+    quantity: number,
+    cart_id: number
+  ) => {
+    try {
+      const response = apiClient.post(
+        "/product/carts/" + localStorage.getItem("cartId") + "/items/",
+        { event_id, quantity, cart_id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "JWT " + localStorage.getItem("accessToken"),
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAddToCart = (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    addToCart(
+      Number(eventId),
+      Number(quantity),
+      Number(localStorage.getItem("cartId"))
+    );
+    const tempId = localStorage.getItem("cartId");
+    localStorage.setItem("cartId", "");
+    localStorage.setItem("cartId", tempId ?? "");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
 
   return (
     <div>
@@ -104,19 +140,29 @@ const EventPage = ({ isLoggedIn }: Props) => {
               marginBottom="10px"
             />
             <Text
+              textAlign="center"
               padding="20px"
               fontSize={{ base: "2xl", lg: "4xl" }}
               fontWeight="bold"
             >
               {event?.title}
             </Text>
-
+            <HStack>
+              <i
+                className="bi bi-calendar"
+                style={{ fontSize: "20px", marginBottom: "26px" }}
+              />
+              <Text paddingBottom="25px" fontSize="18px">
+                {event?.start_date.slice(0, 10)}
+              </Text>
+            </HStack>
             <CategoryMapper eventId={event?.id ?? 0} />
             <Flex
               flexDirection={{ base: "column", md: "row" }}
               gap="20px"
               justifyContent={{ base: "center" }}
               alignItems={{ base: "center" }}
+              fontSize={{ base: "15px", md: "20px" }}
             >
               <HStack>
                 <i className="bi bi-geo-alt-fill" />
@@ -125,10 +171,16 @@ const EventPage = ({ isLoggedIn }: Props) => {
                 </Text>
               </HStack>
               <HStack>
-                <i className="bi bi-map-fill" />
-                <Text marginTop="2.5px" fontSize={18}>
-                  {event?.location.address}
-                </Text>
+                <HStack>
+                  <i className="bi bi-map-fill" />
+                  <Text marginTop="2.5px" fontSize={18}>
+                    {event?.location.address}
+                  </Text>
+                </HStack>
+                <HStack>
+                  <i className="bi bi-star-fill" />
+                  <Text marginTop="3px">{event?.location.rating}</Text>
+                </HStack>
               </HStack>
               <HStack marginTop="2px" className="euro-theme">
                 <i
@@ -143,6 +195,16 @@ const EventPage = ({ isLoggedIn }: Props) => {
                   {event?.price}
                 </Text>
               </HStack>
+            </Flex>
+            <Flex
+              alignSelf="center"
+              width={{ base: "90vw", sm: "70vw", md: "50vw", lg: "30vw" }}
+              paddingTop="20px"
+              fontSize="18px"
+              fontWeight="semibold"
+              textAlign="center"
+            >
+              {event?.description}
             </Flex>
             <Flex flexDirection="row" paddingTop="30px" paddingBottom="70px">
               {isLoggedIn ? (

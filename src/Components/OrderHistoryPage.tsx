@@ -4,10 +4,40 @@ import { useNavigate } from "react-router-dom";
 import { User, getUser } from "../services/user-auth";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import ColorModeSwitch from "./ColorModeSwitch";
+import apiClient from "../services/api-client";
+import { Event } from "../Hooks/useEvent";
+import { CartItem } from "../services/cart-services";
 
-function Home() {
+interface History {
+  id: number;
+  customer: number;
+  placed_at: string;
+  payment_status: string;
+  items: CartItem[];
+}
+
+function OrderHistoryPage() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User>();
+  const [history, setHistory] = useState<History[]>([]);
+
+  const getHistory = async (accessToken: string) => {
+    try {
+      const response = await apiClient.get("/product/customers/history/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "JWT " + localStorage.getItem("accessToken"),
+        },
+      });
+      setHistory(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getHistory(localStorage.getItem("accessToken") ?? "");
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +49,7 @@ function Home() {
       }
     };
     fetchData();
-  }, [localStorage.getItem("accessToken")]);
+  }, []);
 
   return (
     <div>
@@ -83,23 +113,35 @@ function Home() {
               />
               <Text fontWeight="extrabold">Welcome, {user?.first_name}</Text>
             </HStack>
-            <HStack flex="1">
-              <i className="bi bi-telephone-fill" />
-              <Text>Phone number: {user?.phone}</Text>
-            </HStack>
-            <HStack flex="1">
-              <i className="bi bi-balloon-fill" />
-              <Text>Birth date: {user?.birth_date}</Text>
-            </HStack>
-            <VStack flex="1">
-              <i className="bi bi-person-vcard-fill" />
-              <HStack>
-                <Text>First name: {user?.first_name}</Text>
-              </HStack>
-              <HStack flex="1">
-                <Text>Last name: {user?.last_name}</Text>
-              </HStack>
-            </VStack>
+
+            <Flex flexDirection="column">
+              {history.length > 0 ? (
+                history.map((order) => (
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    className="profile-back-button"
+                    borderRadius="15px"
+                    gap={2}
+                    marginTop={5}
+                    padding="15px"
+                  >
+                    <Text>{order.placed_at.slice(0, 10)}</Text>
+                    {order.items.map((cartItem) => (
+                      <Flex flexDir="row" gap={4}>
+                        <Text>{cartItem.event.title}</Text>
+                        <Text>{cartItem.event.price}</Text>
+                        <Text>{cartItem.quantity}</Text>
+                      </Flex>
+                    ))}
+                  </Flex>
+                ))
+              ) : (
+                <Text>No items found</Text>
+              )}
+            </Flex>
+
             <HStack flex="1" alignSelf="center">
               <Flex
                 onClick={() => navigate("/")}
@@ -112,23 +154,6 @@ function Home() {
               >
                 <Text>Go back to main page</Text>
               </Flex>
-              <Flex
-                onClick={() =>
-                  navigate(
-                    "/" +
-                      localStorage.getItem("sessionToken")?.slice(0, 10) +
-                      "/order-history"
-                  )
-                }
-                cursor="pointer"
-                className="profile-back-button"
-                padding="20px"
-                justifyContent="center"
-                alignItems="center"
-                borderRadius="20px"
-              >
-                <Text>View order history</Text>
-              </Flex>
             </HStack>
           </Flex>
         </GridItem>
@@ -137,4 +162,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default OrderHistoryPage;
