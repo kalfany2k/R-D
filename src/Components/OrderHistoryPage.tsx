@@ -106,7 +106,7 @@ function OrderHistoryPage() {
             alignItems="center"
             fontSize="20px"
           >
-            <HStack fontSize="30px" flex="1">
+            <HStack fontSize="30px" flex="1" padding="20px">
               <i
                 style={{ fontWeight: "bold" }}
                 className="bi bi-arrow-return-right"
@@ -126,10 +126,11 @@ function OrderHistoryPage() {
                     gap={2}
                     marginTop={5}
                     padding="15px"
+                    key={order.id}
                   >
                     <Text>{order.placed_at.slice(0, 10)}</Text>
                     {order.items.map((cartItem) => (
-                      <Flex flexDir="row" gap={4}>
+                      <Flex flexDir="row" gap={4} key={cartItem.id}>
                         <Text>{cartItem.event.title}</Text>
                         <Text>{cartItem.event.price}</Text>
                         <Text>{cartItem.quantity}</Text>
@@ -142,14 +143,14 @@ function OrderHistoryPage() {
               )}
             </Flex>
 
-            <HStack flex="1" alignSelf="center">
+            <HStack flex="1" alignSelf="center" padding="20px">
               <Flex
                 onClick={() => navigate("/")}
                 cursor="pointer"
                 className="profile-back-button"
-                padding="20px"
                 justifyContent="center"
                 alignItems="center"
+                padding="20px"
                 borderRadius="20px"
               >
                 <Text>Go back to main page</Text>
