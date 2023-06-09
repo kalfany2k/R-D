@@ -1,0 +1,13 @@
+.container {
+  padding: 50px 0; /* Add some padding to create space between the lines and the content */
+}
+
+button {
+  color: rgba(109, 116, 160, 0.74); /* Make the button names blurry */
+  transition: color 0.3s ease; /* Add a transition effect to color changes */
+}
+
+button:hover {
+  color: white; /* Change the color on hover */
+}
+

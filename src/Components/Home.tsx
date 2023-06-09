@@ -4,6 +4,8 @@ import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
 import EventGrid from "./EventGrid";
 import LocationGrid from "./LocationGrid";
+import Footer from "./Footer";
+import Bottom from "./Bottom";
 
 function App() {
   const [isMenuActive, setMenuActive] = useState(false);
@@ -30,6 +32,8 @@ function App() {
           <GridItem area="main">
             <EventGrid />
             <LocationGrid />
+            <Footer />
+            <Bottom />
           </GridItem>
         </Grid>
       </div>

@@ -31,6 +31,12 @@ const theme = extendTheme({
       ".login": {
         color: props.colorMode === "light" ? "white" : "#e8d399",
       },
+      ".footer-app": {
+        color: props.colorMode === "light" ? "white" : "black ",
+      },
+      ".footer-button": {
+        backgroundColor: props.colorMode === "light" ? "black" : "white",
+      }
     }),
   },
 });
