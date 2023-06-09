@@ -106,6 +106,7 @@ const CartComponent = () => {
             <Text paddingTop="20px">This is your cart</Text>
             {cart?.events.map((event) => (
               <Flex
+                overflow="auto"
                 key={event.id}
                 className="dropdown-options-hover"
                 width="100%"

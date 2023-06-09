@@ -114,7 +114,7 @@ function OrderHistoryPage() {
               <Text fontWeight="extrabold">Welcome, {user?.first_name}</Text>
             </HStack>
 
-            <Flex flexDirection="column">
+            <Flex flexDirection="column" overflow="auto">
               {history.length > 0 ? (
                 history.map((order) => (
                   <Flex

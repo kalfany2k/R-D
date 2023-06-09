@@ -1,4 +1,4 @@
-import { Grid, GridItem, Text } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
 import NavBar from "./NavBar";
 import SearchBar from "./SearchBar";
@@ -6,6 +6,7 @@ import EventGrid from "./EventGrid";
 import { EventQuery } from "../App";
 import { useNavigate } from "react-router-dom";
 import CategorySelector from "./CategorySelector";
+import Footer from "./Footer";
 
 function Home() {
   const [isMenuActive, setMenuActive] = useState(false);
@@ -54,6 +55,7 @@ function Home() {
             }}
           />
           <EventGrid eventQuery={eventQuery} />
+          <Footer />
         </GridItem>
       </Grid>
     </div>
