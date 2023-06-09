@@ -1,6 +1,8 @@
 import ColorModeSwitch from "./ColorModeSwitch";
-import { Text, Button } from "@chakra-ui/react";
+import { Text, Button, background } from "@chakra-ui/react";
 import LoginButton from "./LoginButton";
+import {Link} from "react-router-dom";
+import { color } from "framer-motion";
 
 export const navOptionList = ["How it works", "Become a partner", "Log in"];
 
@@ -17,10 +19,25 @@ const NavButtonsPC = () => {
     >
       <ColorModeSwitch />
       {navOptionList.map((option) => {
+        let linkTo="/";
+        switch (option){
+          case "How it works":
+            linkTo="/how-it-works";
+            
+
+            break;
+          case "Become a partner":
+              linkTo="/become-a-partner";
+              break;
+          default:
+                break;
+        }
         return (
-          <Text key={option} fontSize="1xl" fontWeight="semibold">
+          <Link key={option} to={linkTo}>
+          <Text  fontSize="1xl" fontWeight="semibold">
             {option}
           </Text>
+          </Link>
         );
       })}
 

@@ -6,11 +6,13 @@ import NavButtonsPhone from "./NavButtonsPhone";
 interface Props {
   setMenuActive: () => void;
   isMenuActive: boolean;
+  isHomePage:boolean;
 }
 
-const NavBar = ({ setMenuActive, isMenuActive }: Props) => {
+const NavBar = ({ setMenuActive, isMenuActive,isHomePage }: Props) => {
+
   return (
-    <HStack display="flex" justifyContent="space-between">
+    <HStack display="flex" justifyContent="space-between" >
       <div
         style={{
           display: "flex",

@@ -15,7 +15,6 @@ const SearchBar = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setPaddingTop(window.innerWidth < 769 ? "50px" : "100px");
     };
 
     window.addEventListener("resize", handleResize);
