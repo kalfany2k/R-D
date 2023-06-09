@@ -50,6 +50,12 @@ class CartSerializer(serializers.ModelSerializer):
     customer_id = serializers.SerializerMethodField()
     items = CartItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
+    events = serializers.SerializerMethodField()
+    def get_events(self, cart):
+        cart_items = CartItem.objects.filter(cart=cart)
+        events = [item.event for item in cart_items]
+        event_serializer = EventSerializer(events, many=True)
+        return event_serializer.data
 
     def get_customer_id(self, cart):
         return cart.customer_id if cart.customer else None
@@ -60,7 +66,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ['id', 'customer', 'customer_id', 'items', 'total_price']
+        fields = ['id', 'customer', 'customer_id', 'items', 'total_price', 'events']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
