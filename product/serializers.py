@@ -1,14 +1,10 @@
 from .signals import order_created
-from .models import Cart, CartItem, Category, Customer, Event, EventCreator, Order, OrderItem
+from .models import Cart, CartItem, Category, Customer, Event, Order, OrderItem
 from django.db import transaction
 from rest_framework import serializers
 from core.models import User
 from location.models import Location
 from location.serializers import LocationSerializer
-
-
-
-
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -118,9 +114,7 @@ class AddCartItemSerializer(serializers.ModelSerializer):
     
         return self.instance
 
-        
-
-
+    
     class Meta:
         model = CartItem
         fields = ['id', 'event_id', 'quantity', 'cart']
@@ -143,10 +137,10 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'phone', 'birth_date', 'first_name', 'last_name']
 
 
-class EventCreatorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EventCreator
-        fields = ['id', 'phone', 'birth_date']
+# class EventCreatorSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = EventCreator
+#         fields = ['id', 'phone', 'birth_date']
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

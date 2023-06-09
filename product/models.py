@@ -3,13 +3,13 @@ from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.conf import settings
-from uuid import uuid4
-from datetime import datetime
-from core.models import User
-from location.models import Location
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from uuid import uuid4
+from datetime import datetime
+from location.models import Location
+
+
 #from store.validators import validate_file_size
 
 
@@ -94,14 +94,6 @@ class OrderItem(models.Model):
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
 
-
-class Address(models.Model):
-    street = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE)
-
-
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -117,13 +109,13 @@ class CartItem(models.Model):
         unique_together = [['cart', 'event']]
 
 
+# we wanted to have a different user for creating events but we didn't manage to get to a point to implement it
+# class EventCreator(models.Model):
+#     phone = models.CharField(max_length=255)
+#     birth_date = models.DateField(null=True)
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
 
-class EventCreator(models.Model):
-    phone = models.CharField(max_length=255)
-    birth_date = models.DateField(null=True)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)    
-
-    def create_event(self, event_data):
-        event = Event.objects.create(**event_data, creator=self)
-        return event
+#     def create_event(self, event_data):
+#         event = Event.objects.create(**event_data, creator=self)
+#         return event
 
