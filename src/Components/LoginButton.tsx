@@ -7,11 +7,13 @@ import {
   HStack,
   Input,
   Flex,
+  Box,
 } from "@chakra-ui/react";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/user-auth";
-import { createCart } from "../services/cart-services";
+import { Cart } from "../services/cart-services";
+import apiClient from "../services/api-client";
 
 interface Props {
   children: ReactNode;
@@ -21,19 +23,43 @@ const LoginButton = ({ children }: Props) => {
   const [isLoginPopupOpen, setLoginPopupOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [cart, setCart] = useState<Cart>();
   const navigate = useNavigate();
 
   const handleCreateAccount = () => {
     navigate("/register");
   };
 
-  const handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const createCart = async () => {
+    try {
+      const response = await apiClient.post(
+        "/product/carts/",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "JWT " + localStorage.getItem("accessToken"),
+          },
+        }
+      );
+      const createdCart = response.data;
+      setCart(createdCart);
+      return createdCart;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    login(username, password).then(() => {
+  const handleSubmitForm = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      await login(username, password);
+      const createdCard = await createCart();
+      localStorage.setItem("cartId", createdCard.id.toString());
       window.location.reload();
-      createCart();
-    });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
